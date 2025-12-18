@@ -21,7 +21,7 @@
         /* Sidebar */
         .sidebar {
             width: 250px;
-            background: #E30613;
+            background: #2F3A4A;
             color: white;
             height: 100vh;
             position: fixed;
@@ -33,6 +33,21 @@
         .sidebar-header {
             padding: 30px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header-text {
+            flex: 1;
         }
 
         .sidebar-header h1 {
@@ -59,12 +74,13 @@
         }
 
         .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: #3A4557;
         }
 
         .menu-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-left-color: white;
+            background-color: #3A4557;
+            border-left-color: #E30613;
+            border-left-width: 4px;
         }
 
         .menu-item.logout {
@@ -208,88 +224,75 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        /* Monthly Insights Info Boxes */
+        /* Monthly Insights – Info Pills (Insight Bar) */
         .insights-section {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 22px;
         }
 
         .info-box {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid #e0e0e0;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: #ffffff;
+            border: 1px solid #e7e9ee;
+            border-radius: 9999px;
+            padding: 8px 12px;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
         .info-box:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transform: none;
+            box-shadow: none;
+            background: #fbfbfc;
         }
 
+        /* Subtle tints (not alert-style) */
         .info-box.positive {
-            border-left-color: #27ae60;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f9f4 100%);
+            background: #f2fbf6;
+            border-color: #cfeedd;
         }
 
         .info-box.negative {
-            border-left-color: #e74c3c;
-            background: linear-gradient(135deg, #ffffff 0%, #fef5f5 100%);
+            background: #fff5f5;
+            border-color: #ffd6d6;
         }
 
         .info-box.neutral {
-            border-left-color: #4DA3FF;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            background: #f3f7ff;
+            border-color: #d6e6ff;
         }
 
-        .info-box-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .info-box-icon {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-
-        .info-box-title {
-            font-size: 13px;
-            color: #666;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .info-box-content {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .info-box-value {
-            font-weight: 700;
+        .info-pill-icon {
             font-size: 16px;
-            margin: 5px 0;
+            line-height: 1;
+            flex-shrink: 0;
         }
 
-        .info-box.positive .info-box-value {
-            color: #27ae60;
+        .info-pill-text {
+            font-size: 13px;
+            color: #2d3748;
+            line-height: 1.35;
         }
 
-        .info-box.negative .info-box-value {
-            color: #e74c3c;
+        .info-box.positive .info-pill-text {
+            color: #1e8449;
         }
 
-        .info-box.neutral .info-box-value {
-            color: #4DA3FF;
+        .info-box.negative .info-pill-text {
+            color: #a93226;
+        }
+
+        .info-box.neutral .info-pill-text {
+            color: #1f4e79;
         }
 
         .info-box-loading {
-            color: #ccc;
+            color: #8a94a6;
             font-style: italic;
             font-size: 13px;
         }
@@ -299,10 +302,64 @@
             font-size: 13px;
         }
 
-        @media (max-width: 1200px) {
+        /* Responsive: stack vertically on small screens */
+        @media (max-width: 900px) {
             .insights-section {
                 grid-template-columns: 1fr;
             }
+
+            .info-box {
+                border-radius: 16px;
+            }
+        }
+
+        /* Bu Ayın Öne Çıkan Turları */
+        .featured-tours-section {
+            background: #ffffff;
+            border: 1px solid #e7e9ee;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+        }
+
+        .featured-tours-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .featured-tours-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .featured-tours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .featured-tour-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #2d3748;
+            line-height: 1.35;
+        }
+
+        .featured-tour-icon {
+            width: 18px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .featured-tour-name {
+            font-weight: 700;
+            color: #333;
         }
 
         /* Critical Occupancy Alerts Section */
@@ -472,8 +529,11 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h1>Jolly SmartTour</h1>
-            <p>Karar Destek Sistemi</p>
+            <img src="images/Jolly-Tur-Logo.jpg" alt="Jolly Logo" class="sidebar-logo">
+            <div class="sidebar-header-text">
+                <h1>Jolly SmartTour</h1>
+                <p>Karar Destek Sistemi</p>
+            </div>
         </div>
         <nav class="sidebar-menu">
             <a href="home.html" class="menu-item active">Anasayfa</a>
@@ -536,32 +596,40 @@
         <!-- Monthly Insights Info Boxes -->
         <div class="insights-section">
             <div class="info-box" id="reservationChangeBox">
-                <div class="info-box-header">
-                    <span class="info-box-icon" id="reservationChangeIcon">📊</span>
-                    <span class="info-box-title">Rezervasyon Değişimi</span>
-                </div>
-                <div class="info-box-content" id="reservationChangeText">
+                <span class="info-pill-icon">📊</span>
+                <span class="info-pill-text" id="reservationChangeText">
                     <span class="info-box-loading">Yükleniyor...</span>
-                </div>
+                </span>
             </div>
 
             <div class="info-box" id="averageProfitChangeBox">
-                <div class="info-box-header">
-                    <span class="info-box-icon" id="averageProfitChangeIcon">💰</span>
-                    <span class="info-box-title">Ortalama Kâr Değişimi</span>
-                </div>
-                <div class="info-box-content" id="averageProfitChangeText">
+                <span class="info-pill-icon">💰</span>
+                <span class="info-pill-text" id="averageProfitChangeText">
                     <span class="info-box-loading">Yükleniyor...</span>
-                </div>
+                </span>
             </div>
 
             <div class="info-box neutral" id="campaignReservationBox">
-                <div class="info-box-header">
-                    <span class="info-box-icon">🎯</span>
-                    <span class="info-box-title">Kampanyalı Rezervasyon Oranı</span>
-                </div>
-                <div class="info-box-content" id="campaignReservationText">
+                <span class="info-pill-icon">🎯</span>
+                <span class="info-pill-text" id="campaignReservationText">
                     <span class="info-box-loading">Yükleniyor...</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Bu Ayın Öne Çıkan Turları -->
+        <div class="featured-tours-section" id="featuredToursSection">
+            <div class="featured-tours-header">
+                <h2 class="featured-tours-title">Bu Ayın Öne Çıkan Turları</h2>
+            </div>
+            <div class="featured-tours-list">
+                <div class="featured-tour-row">
+                    <span class="featured-tour-icon">📈</span>
+                    <span>En Karlı Tur: <span class="featured-tour-name" id="topProfitableTourName">Yükleniyor...</span></span>
+                </div>
+                <div class="featured-tour-row">
+                    <span class="featured-tour-icon">⚠️</span>
+                    <span>En Riskli Tur: <span class="featured-tour-name" id="riskiestTourName">Yükleniyor...</span></span>
                 </div>
             </div>
         </div>
@@ -646,42 +714,38 @@
 
                 // Box 1: Rezervasyon Değişimi
                 const reservationChangeBox = document.getElementById('reservationChangeBox');
-                const reservationChangeIcon = document.getElementById('reservationChangeIcon');
                 const reservationChangeText = document.getElementById('reservationChangeText');
                 
                 const reservationChange = data.reservationChangePercent;
                 const isReservationIncrease = reservationChange >= 0;
                 
                 reservationChangeBox.className = isReservationIncrease ? 'info-box positive' : 'info-box negative';
-                reservationChangeIcon.textContent = isReservationIncrease ? '↑' : '↓';
                 
                 const reservationChangeAbs = Math.abs(reservationChange);
-                const reservationText = isReservationIncrease 
-                    ? `Rezervasyon sayısı geçen aya göre <span class="info-box-value">%${reservationChangeAbs.toFixed(1)}</span> arttı`
-                    : `Rezervasyon sayısı geçen aya göre <span class="info-box-value">%${reservationChangeAbs.toFixed(1)}</span> azaldı`;
-                reservationChangeText.innerHTML = reservationText;
+                const reservationText = isReservationIncrease
+                    ? `Rezervasyon sayısı geçen aya göre %${reservationChangeAbs.toFixed(1)} arttı`
+                    : `Rezervasyon sayısı geçen aya göre %${reservationChangeAbs.toFixed(1)} azaldı`;
+                reservationChangeText.textContent = reservationText;
 
                 // Box 2: Ortalama Kâr Değişimi
                 const averageProfitChangeBox = document.getElementById('averageProfitChangeBox');
-                const averageProfitChangeIcon = document.getElementById('averageProfitChangeIcon');
                 const averageProfitChangeText = document.getElementById('averageProfitChangeText');
                 
                 const averageProfitChange = data.averageProfitChangePercent;
                 const isAverageProfitIncrease = averageProfitChange >= 0;
                 
                 averageProfitChangeBox.className = isAverageProfitIncrease ? 'info-box positive' : 'info-box negative';
-                averageProfitChangeIcon.textContent = isAverageProfitIncrease ? '↑' : '↓';
                 
                 const averageProfitChangeAbs = Math.abs(averageProfitChange);
                 const averageProfitText = isAverageProfitIncrease
-                    ? `Rezervasyon başına ortalama kâr <span class="info-box-value">%${averageProfitChangeAbs.toFixed(1)}</span> arttı`
-                    : `Rezervasyon başına ortalama kâr <span class="info-box-value">%${averageProfitChangeAbs.toFixed(1)}</span> azaldı`;
-                averageProfitChangeText.innerHTML = averageProfitText;
+                    ? `Rezervasyon başına ortalama kâr %${averageProfitChangeAbs.toFixed(1)} arttı`
+                    : `Rezervasyon başına ortalama kâr %${averageProfitChangeAbs.toFixed(1)} azaldı`;
+                averageProfitChangeText.textContent = averageProfitText;
 
                 // Box 3: Kampanyalı Rezervasyon Oranı
                 const campaignReservationText = document.getElementById('campaignReservationText');
                 const campaignRate = data.campaignReservationRate;
-                campaignReservationText.innerHTML = `Bu ay yapılan rezervasyonların <span class="info-box-value">%${campaignRate.toFixed(1)}</span>'i kampanyalı`;
+                campaignReservationText.textContent = `Bu ay yapılan rezervasyonların %${campaignRate.toFixed(1)}’i kampanyalı`;
 
             } catch (error) {
                 console.error('Aylık içgörüler yüklenirken hata:', error);
@@ -737,11 +801,36 @@
             }
         }
 
+        // Fetch and display "Bu Ayın Öne Çıkan Turları"
+        async function loadFeaturedTours() {
+            const topEl = document.getElementById('topProfitableTourName');
+            const riskEl = document.getElementById('riskiestTourName');
+
+            try {
+                const response = await fetch('/api/home/featured-tours');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                const topName = data?.topProfitableTour?.turAdi;
+                const riskName = data?.riskiestTour?.turAdi;
+
+                if (topEl) topEl.textContent = topName || 'Veri bulunamadı';
+                if (riskEl) riskEl.textContent = riskName || 'Veri bulunamadı';
+            } catch (error) {
+                console.error('Öne çıkan tur verileri yüklenirken hata:', error);
+                if (topEl) topEl.textContent = 'Hata';
+                if (riskEl) riskEl.textContent = 'Hata';
+            }
+        }
+
         // Load KPI data when page loads
         document.addEventListener('DOMContentLoaded', () => {
             loadKPIData();
             loadMonthlyProfit();
             loadMonthlyInsights();
+            loadFeaturedTours();
             loadCriticalOccupancyAlerts();
         });
     </script>

@@ -21,7 +21,7 @@
         /* Sidebar */
         .sidebar {
             width: 250px;
-            background: #E30613;
+            background: #2F3A4A;
             color: white;
             height: 100vh;
             position: fixed;
@@ -33,6 +33,21 @@
         .sidebar-header {
             padding: 30px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header-text {
+            flex: 1;
         }
 
         .sidebar-header h1 {
@@ -59,12 +74,13 @@
         }
 
         .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: #3A4557;
         }
 
         .menu-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-left-color: white;
+            background-color: #3A4557;
+            border-left-color: #E30613;
+            border-left-width: 4px;
         }
 
         .menu-item.logout {
@@ -108,8 +124,11 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h1>Jolly SmartTour</h1>
-            <p>Karar Destek Sistemi</p>
+            <img src="images/jolly-logo.png" alt="Jolly Logo" class="sidebar-logo">
+            <div class="sidebar-header-text">
+                <h1>Jolly SmartTour</h1>
+                <p>Karar Destek Sistemi</p>
+            </div>
         </div>
         <nav class="sidebar-menu">
             <a href="home.html" class="menu-item">Anasayfa</a>

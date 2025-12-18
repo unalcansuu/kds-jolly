@@ -21,7 +21,7 @@
         /* Sidebar */
         .sidebar {
             width: 250px;
-            background: #E30613;
+            background: #2F3A4A;
             color: white;
             height: 100vh;
             position: fixed;
@@ -33,6 +33,21 @@
         .sidebar-header {
             padding: 30px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header-text {
+            flex: 1;
         }
 
         .sidebar-header h1 {
@@ -59,12 +74,13 @@
         }
 
         .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: #3A4557;
         }
 
         .menu-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-left-color: white;
+            background-color: #3A4557;
+            border-left-color: #E30613;
+            border-left-width: 4px;
         }
 
         .menu-item.logout {
@@ -88,28 +104,290 @@
             font-weight: 600;
         }
 
-        .content-placeholder {
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-container {
             background: white;
             border-radius: 12px;
-            padding: 60px;
+            padding: 30px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            flex: 1;
             text-align: center;
         }
 
-        .content-placeholder p {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 15px;
-            line-height: 1.6;
+        .chart-insight-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #eafaf1 0%, #f3fff8 100%);
+            border: 1px solid rgba(46, 204, 113, 0.28);
+            border-left: 3px solid #2ECC71;
+            color: #1e8449;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
         }
+
+        .chart-insight-badge-icon {
+            font-size: 14px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .chart-loading {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .chart-error {
+            text-align: center;
+            padding: 60px;
+            color: #e74c3c;
+        }
+
+        /* Manager Note Section */
+        .analysis-info-box {
+            background: #fafafa;
+            border-left: 4px solid #2F3A4A;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+        }
+
+        .analysis-info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .analysis-info-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .analysis-info-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .analysis-info-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .analysis-info-list {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .analysis-info-list li {
+            margin: 0 0 12px 0;
+        }
+
+        .analysis-info-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .analysis-info-list li::marker {
+            color: #2F3A4A;
+        }
+
+        /* Tur Bazlı Karşılaştırma Analizi */
+        .compare-section {
+            margin-top: 22px;
+        }
+
+        .compare-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .compare-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .compare-panel {
+            background: #ffffff;
+            border: 1px solid #e7e9ee;
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .compare-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 14px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #52606d;
+            margin-bottom: 6px;
+        }
+
+        .field-group select {
+            width: 100%;
+            height: 38px;
+            padding: 8px 10px;
+            border: 1px solid #d7dbe5;
+            border-radius: 10px;
+            background: #fff;
+            color: #2d3748;
+        }
+
+        .compare-btn {
+            height: 38px;
+            padding: 0 14px;
+            border: 1px solid rgba(227, 6, 19, 0.25);
+            background: #E30613;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .compare-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .compare-error {
+            color: #a93226;
+            font-size: 13px;
+            margin: 6px 0 0 0;
+            display: none;
+        }
+
+        .compare-table-wrap {
+            border-top: 1px solid #edf0f5;
+            padding-top: 14px;
+            margin-top: 14px;
+        }
+
+        table.compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #edf0f5;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .compare-table th {
+            font-size: 12px;
+            color: #52606d;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+        }
+
+        .compare-table td.feature {
+            font-weight: 700;
+            color: #333;
+            width: 34%;
+        }
+
+        .compare-muted {
+            color: #8a94a6;
+        }
+
+        .compare-eval {
+            margin-top: 14px;
+            background: #fafafa;
+            border-left: 4px solid #2F3A4A;
+            padding: 14px 16px;
+        }
+
+        .compare-eval-title {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .compare-eval-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #555;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .compare-eval-list li {
+            margin: 0 0 8px 0;
+        }
+
+        .compare-eval-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 900px) {
+            .compare-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* (Yönetici Notu bölümü kaldırıldı) */
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h1>Jolly SmartTour</h1>
-            <p>Karar Destek Sistemi</p>
+            <img src="images/jolly-logo.png" alt="Jolly Logo" class="sidebar-logo">
+            <div class="sidebar-header-text">
+                <h1>Jolly SmartTour</h1>
+                <p>Karar Destek Sistemi</p>
+            </div>
         </div>
         <nav class="sidebar-menu">
             <a href="home.html" class="menu-item">Anasayfa</a>
@@ -124,10 +402,699 @@
     <main class="main-content">
         <h1 class="page-title">Tur Analizi</h1>
         
-        <div class="content-placeholder">
-            <p>Tur analizi içeriği burada görüntülenecektir.</p>
-            <p>Bu sayfa tur performans metrikleri, KPI'lar ve analitik veriler içerecektir.</p>
+        <!-- Charts Row -->
+        <div class="charts-row">
+            <!-- Reservation Distribution Chart -->
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Türlerine Göre Rezervasyon Dağılımı</h2>
+                    <div class="chart-insight-badge" id="reservationLeaderBadge" style="display: none;">
+                        <span class="chart-insight-badge-icon">⭐</span>
+                        <span id="reservationLeaderText"></span>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="tourTypeChart"></canvas>
+                    <div id="chartLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="chartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+            </div>
+
+            <!-- Average Occupancy Chart -->
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Türlerine Göre Ortalama Doluluk Oranı</h2>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="occupancyChart"></canvas>
+                    <div id="occupancyChartLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="occupancyChartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+            </div>
         </div>
+
+        <!-- Analysis Info Box -->
+        <div class="analysis-info-box">
+            <div class="analysis-info-header">
+                <span class="analysis-info-icon">📌</span>
+                <h2 class="analysis-info-title">Analitik Değerlendirme</h2>
+            </div>
+            <div class="analysis-info-content">
+                <ul class="analysis-info-list">
+                    <li>
+                        Kültür turları rezervasyon lideri olmasına rağmen doluluk oranının orta seviyede kalması,
+                        kapasite planlaması ve fiyat optimizasyonu ihtiyacına işaret etmektedir.
+                        Bu durum tur başına olan kârı düşürebilir.
+                    </li>
+                    <li>
+                        Macera turları düşük rezervasyon payına rağmen en yüksek doluluk oranına sahiptir.
+                        Bu durum, ilgilenen kitlenin sadık olduğuna veya turun potansiyelinin yüksek olduğuna,
+                        bu nedenle kapasitenin artırılabileceğine işaret edebilir.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tur Bazlı Karşılaştırma Analizi -->
+        <section class="compare-section" aria-label="Tur Bazlı Karşılaştırma Analizi">
+            <div class="compare-header">
+                <h2 class="compare-title">Tur Bazlı Karşılaştırma Analizi</h2>
+            </div>
+
+            <div class="compare-panel">
+                <!-- 1) Tur Seçim Alanı -->
+                <div class="compare-controls">
+                    <div class="field-group">
+                        <label for="tourSelectA">Tur A Seç</label>
+                        <select id="tourSelectA">
+                            <option value="">Seçiniz...</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="tourSelectB">Tur B Seç</label>
+                        <select id="tourSelectB">
+                            <option value="">Seçiniz...</option>
+                        </select>
+                    </div>
+
+                    <button class="compare-btn" id="compareBtn" type="button" disabled>Karşılaştır</button>
+                </div>
+
+                <div class="compare-error" id="compareError"></div>
+
+                <!-- 2) Karşılaştırma Tablosu -->
+                <div class="compare-table-wrap" id="compareResult" style="display:none;">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Özellik</th>
+                                <th id="colTourA">Tur A</th>
+                                <th id="colTourB">Tur B</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="feature">Fiyat</td>
+                                <td id="rowPriceA" class="compare-muted">-</td>
+                                <td id="rowPriceB" class="compare-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="feature">Kapasite</td>
+                                <td id="rowCapacityA" class="compare-muted">-</td>
+                                <td id="rowCapacityB" class="compare-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="feature">Doluluk Oranı (%)</td>
+                                <td id="rowOccA" class="compare-muted">-</td>
+                                <td id="rowOccB" class="compare-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="feature">Süre (gün)</td>
+                                <td id="rowDurationA" class="compare-muted">-</td>
+                                <td id="rowDurationB" class="compare-muted">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- 3) Dinamik Analitik Yorum -->
+                    <div class="compare-eval" id="compareEval" style="display:none;">
+                        <div class="compare-eval-title">📊 Karşılaştırmalı Analitik Değerlendirme</div>
+                        <ul class="compare-eval-list" id="compareEvalList"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <script>
+        let tourTypeChart = null;
+        let occupancyChart = null;
+
+        // Register datalabels plugin if available
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+
+        // Fetch and display tour analysis by type
+        async function loadTourAnalysisByType() {
+            const canvas = document.getElementById('tourTypeChart');
+            const loadingEl = document.getElementById('chartLoading');
+            const errorEl = document.getElementById('chartError');
+            const ctx = canvas.getContext('2d');
+
+            try {
+                const response = await fetch('/api/tour-analysis/by-type');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                if (data.tourTypes && data.tourTypes.length > 0) {
+                    loadingEl.style.display = 'none';
+                    errorEl.style.display = 'none';
+
+                    // Extract labels and data
+                    const labels = data.tourTypes.map(item => item.turTuru);
+                    const counts = data.tourTypes.map(item => item.rezervasyonSayisi);
+
+                    // Find the tour type with highest reservation count
+                    let maxIndex = 0;
+                    let maxCount = counts[0];
+                    for (let i = 1; i < counts.length; i++) {
+                        if (counts[i] > maxCount) {
+                            maxCount = counts[i];
+                            maxIndex = i;
+                        }
+                    }
+                    const leaderTourType = labels[maxIndex];
+
+                    // Update insight badge
+                    const leaderBadge = document.getElementById('reservationLeaderBadge');
+                    const leaderText = document.getElementById('reservationLeaderText');
+                    if (leaderBadge && leaderText) {
+                        leaderText.textContent = 'Rezervasyon Lideri: ' + leaderTourType;
+                        leaderBadge.style.display = 'inline-flex';
+                    }
+
+                    // Calculate total for percentage calculation
+                    const total = counts.reduce((sum, count) => sum + count, 0);
+
+                    // Professional color palette for tour types
+                    const colorPalette = [
+                        '#E30613', // Jolly Red
+                        '#3498db', // Blue
+                        '#2ecc71', // Green
+                        '#f39c12', // Orange
+                        '#9b59b6', // Purple
+                        '#1abc9c', // Turquoise
+                        '#e67e22'  // Dark Orange
+                    ];
+
+                    // Assign colors to each tour type
+                    const backgroundColors = labels.map((_, index) => colorPalette[index % colorPalette.length]);
+                    const borderColors = backgroundColors.map(color => color);
+
+                    // Destroy existing chart if it exists
+                    if (tourTypeChart) {
+                        tourTypeChart.destroy();
+                    }
+
+                    // Create donut chart
+                    tourTypeChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Rezervasyon Sayısı',
+                                data: counts,
+                                backgroundColor: backgroundColors,
+                                borderColor: '#ffffff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '60%', // Creates donut hole (60% inner radius)
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                    labels: {
+                                        padding: 15,
+                                        font: {
+                                            size: 12
+                                        },
+                                        usePointStyle: true
+                                    }
+                                },
+                                title: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed || 0;
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return label + ': ' + value + ' (' + percentage + '%)';
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    display: true,
+                                    formatter: function(value, context) {
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return percentage + '%';
+                                    },
+                                    color: '#333',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 11
+                                    },
+                                    textStrokeColor: '#fff',
+                                    textStrokeWidth: 2
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    loadingEl.style.display = 'none';
+                    errorEl.textContent = 'Gösterilecek veri bulunamadı.';
+                    errorEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Tur analizi yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // Fetch and display average occupancy by tour type
+        async function loadOccupancyByType() {
+            const canvas = document.getElementById('occupancyChart');
+            const loadingEl = document.getElementById('occupancyChartLoading');
+            const errorEl = document.getElementById('occupancyChartError');
+            const ctx = canvas.getContext('2d');
+
+            try {
+                const response = await fetch('/api/tour-analysis/avg-occupancy-by-type');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                if (data.tourTypes && data.tourTypes.length > 0) {
+                    loadingEl.style.display = 'none';
+                    errorEl.style.display = 'none';
+
+                    // Extract labels and data
+                    const labels = data.tourTypes.map(item => item.turTuru);
+                    const occupancies = data.tourTypes.map(item => item.ortalamaDoluluk);
+
+                    // Color code based on occupancy levels
+                    const backgroundColors = occupancies.map(occ => {
+                        if (occ < 40) {
+                            return '#e74c3c'; // Red
+                        } else if (occ >= 40 && occ <= 70) {
+                            return '#f39c12'; // Orange/Yellow
+                        } else {
+                            return '#27ae60'; // Green
+                        }
+                    });
+
+                    const borderColors = occupancies.map(occ => {
+                        if (occ < 40) {
+                            return '#c0392b'; // Darker red
+                        } else if (occ >= 40 && occ <= 70) {
+                            return '#d68910'; // Darker orange
+                        } else {
+                            return '#229954'; // Darker green
+                        }
+                    });
+
+                    // Destroy existing chart if it exists
+                    if (occupancyChart) {
+                        occupancyChart.destroy();
+                    }
+
+                    // Create new chart
+                    occupancyChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Ortalama Doluluk Oranı (%)',
+                                data: occupancies,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return 'Ortalama Doluluk: ' + context.parsed.y.toFixed(1) + '%';
+                                        }
+                                    }
+                                },
+                                // Only affects the value labels rendered on the bars
+                                datalabels: {
+                                    display: true,
+                                    anchor: 'center',
+                                    align: 'center',
+                                    formatter: function(value) {
+                                        const n = Number(value);
+                                        if (!Number.isFinite(n)) return '';
+                                        const rounded = Math.round(n * 10) / 10;
+                                        const s = rounded.toFixed(1);
+                                        return s.endsWith('.0') ? s.slice(0, -2) : s;
+                                    },
+                                    color: '#ffffff',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 11
+                                    },
+                                    textStrokeColor: 'rgba(0,0,0,0.25)',
+                                    textStrokeWidth: 2,
+                                    clamp: true
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    title: {
+                                        display: true,
+                                        text: 'Ortalama Doluluk Oranı (%)',
+                                        font: {
+                                            size: 14,
+                                            weight: 'bold'
+                                        }
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Tur Türü',
+                                        font: {
+                                            size: 14,
+                                            weight: 'bold'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    loadingEl.style.display = 'none';
+                    errorEl.textContent = 'Gösterilecek veri bulunamadı.';
+                    errorEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Doluluk oranı analizi yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Tur Bazlı Karşılaştırma Analizi
+        // -----------------------------
+        async function loadTourOptions() {
+            const selectA = document.getElementById('tourSelectA');
+            const selectB = document.getElementById('tourSelectB');
+            const btn = document.getElementById('compareBtn');
+            const err = document.getElementById('compareError');
+
+            try {
+                const response = await fetch('/api/tours');
+                if (!response.ok) throw new Error('API yanıtı alınamadı');
+                const data = await response.json();
+
+                const tours = Array.isArray(data.tours) ? data.tours : [];
+
+                // Reset options (keep placeholder)
+                selectA.innerHTML = '<option value="">Seçiniz...</option>';
+                selectB.innerHTML = '<option value="">Seçiniz...</option>';
+
+                tours.forEach(t => {
+                    const optA = document.createElement('option');
+                    optA.value = String(t.turId);
+                    optA.textContent = t.turAdi;
+                    selectA.appendChild(optA);
+
+                    const optB = document.createElement('option');
+                    optB.value = String(t.turId);
+                    optB.textContent = t.turAdi;
+                    selectB.appendChild(optB);
+                });
+
+                const syncDisabled = () => {
+                    const aVal = selectA.value;
+                    const bVal = selectB.value;
+
+                    // enable all
+                    Array.from(selectA.options).forEach(o => (o.disabled = false));
+                    Array.from(selectB.options).forEach(o => (o.disabled = false));
+
+                    // disable the same choice in the other select
+                    if (aVal) {
+                        const o = Array.from(selectB.options).find(x => x.value === aVal);
+                        if (o) o.disabled = true;
+                    }
+                    if (bVal) {
+                        const o = Array.from(selectA.options).find(x => x.value === bVal);
+                        if (o) o.disabled = true;
+                    }
+
+                    // button enable
+                    btn.disabled = !(aVal && bVal && aVal !== bVal);
+
+                    // clear error
+                    err.style.display = 'none';
+                    err.textContent = '';
+                };
+
+                selectA.addEventListener('change', syncDisabled);
+                selectB.addEventListener('change', syncDisabled);
+
+                syncDisabled();
+            } catch (error) {
+                console.error('Tur seçenekleri yüklenirken hata:', error);
+                if (err) {
+                    err.textContent = 'Tur listesi yüklenemedi.';
+                    err.style.display = 'block';
+                }
+                if (btn) btn.disabled = true;
+            }
+        }
+
+        function formatCurrencyTRY(value) {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '-';
+            return new Intl.NumberFormat('tr-TR', {
+                style: 'currency',
+                currency: 'TRY',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Number(value));
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '-';
+            return new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(Number(value));
+        }
+
+        function formatPercent(value) {
+            if (value === null || value === undefined || !Number.isFinite(Number(value))) return '-';
+            const n = Number(value);
+            const rounded = Math.round(n * 10) / 10;
+            const s = rounded.toFixed(1);
+            return (s.endsWith('.0') ? s.slice(0, -2) : s) + '%';
+        }
+
+        async function fetchTourDetail(turId) {
+            const response = await fetch(`/api/tours/${encodeURIComponent(turId)}`);
+            if (!response.ok) throw new Error('Tur detayı alınamadı');
+            const data = await response.json();
+            return data.tur;
+        }
+
+        function setText(id, value, mutedWhenDash = true) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const isDash = value === '-' || value === null || value === undefined;
+            el.textContent = value ?? '-';
+            if (mutedWhenDash) {
+                el.classList.toggle('compare-muted', isDash);
+            }
+        }
+
+        function buildComparisonInsights(tourA, tourB) {
+            const lines = [];
+
+            const occA = Number(tourA?.dolulukOrani);
+            const occB = Number(tourB?.dolulukOrani);
+            const hasOccA = Number.isFinite(occA);
+            const hasOccB = Number.isFinite(occB);
+
+            if (hasOccA && hasOccB) {
+                if (occA > occB + 2) {
+                    lines.push('Tur A, doluluk oranı açısından daha yüksek verimlilik göstermektedir.');
+                } else if (occB > occA + 2) {
+                    lines.push('Tur B, doluluk oranı açısından daha yüksek verimlilik göstermektedir.');
+                } else {
+                    lines.push('İki turun doluluk oranları birbirine yakın seviyededir.');
+                }
+            }
+
+            const priceA = Number(tourA?.fiyat);
+            const priceB = Number(tourB?.fiyat);
+            const hasPriceA = Number.isFinite(priceA);
+            const hasPriceB = Number.isFinite(priceB);
+
+            if (hasPriceA && hasPriceB) {
+                if (priceA > priceB) {
+                    lines.push('Tur A daha yüksek fiyatlı olup gelir potansiyeli açısından avantaj sağlayabilir; ancak gelir dengesi doluluk performansı ile birlikte değerlendirilmelidir.');
+                } else if (priceB > priceA) {
+                    lines.push('Tur B daha yüksek fiyatlı olup gelir potansiyeli açısından avantaj sağlayabilir; ancak gelir dengesi doluluk performansı ile birlikte değerlendirilmelidir.');
+                } else {
+                    lines.push('İki turun fiyat düzeyi benzer görünmektedir.');
+                }
+            } else {
+                lines.push('Fiyat bilgisi eksik olduğundan gelir potansiyeli karşılaştırması sınırlıdır.');
+            }
+
+            const capA = Number(tourA?.kapasite);
+            const capB = Number(tourB?.kapasite);
+            const hasCapA = Number.isFinite(capA);
+            const hasCapB = Number.isFinite(capB);
+
+            // High capacity + low occupancy => inefficiency warning (rule-based)
+            const LOW_OCC = 40;
+            if (hasCapA && hasOccA && hasCapB) {
+                if (capA > capB && occA < LOW_OCC) {
+                    lines.push('Tur A’nın kapasitesi yüksek olmasına rağmen doluluk oranının düşük olması, verimlilik ve kapasite planlaması açısından gözden geçirme önerisine işaret etmektedir.');
+                }
+            }
+            if (hasCapB && hasOccB && hasCapA) {
+                if (capB > capA && occB < LOW_OCC) {
+                    lines.push('Tur B’nin kapasitesi yüksek olmasına rağmen doluluk oranının düşük olması, verimlilik ve kapasite planlaması açısından gözden geçirme önerisine işaret etmektedir.');
+                }
+            }
+
+            // Duration rules (tur_gunu) – only add comments when rules match
+            const durA = Number(tourA?.sureGun);
+            const durB = Number(tourB?.sureGun);
+            const hasDurA = Number.isFinite(durA);
+            const hasDurB = Number.isFinite(durB);
+            if (hasDurA && hasDurB && durA !== durB) {
+                // Kural 1
+                if (durA < durB && hasOccA && hasOccB && occA > occB) {
+                    lines.push('Daha kısa süreli olmasına rağmen yüksek doluluk oranına sahip olması, Tur A’nın zaman açısından daha verimli bir ürün olduğunu göstermektedir.');
+                }
+                // Kural 2
+                if (durB > durA && hasPriceA && hasPriceB && priceB > priceA) {
+                    lines.push('Tur B’nin daha uzun süreli olması, kişi başı gelir potansiyelini artırabilir ancak doluluk oranı dikkatle izlenmelidir.');
+                }
+            }
+
+            // Demand/price hint (optional) – only if both price+occupancy exist
+            if (hasPriceA && hasPriceB && hasOccA && hasOccB) {
+                if (priceA < priceB && occA < occB) {
+                    lines.push('Tur A daha düşük fiyatlı olsa da doluluk oranının daha düşük olması, talep artırımı için hedefli pazarlama önerisini gündeme getirebilir.');
+                }
+                if (priceB < priceA && occB < occA) {
+                    lines.push('Tur B daha düşük fiyatlı olsa da doluluk oranının daha düşük olması, talep artırımı için hedefli pazarlama önerisini gündeme getirebilir.');
+                }
+            }
+
+            // Fallback if no lines for some reason
+            if (lines.length === 0) {
+                lines.push('Seçilen turlar için karşılaştırmalı değerlendirme üretilemedi.');
+            }
+
+            return lines;
+        }
+
+        async function compareTours() {
+            const selectA = document.getElementById('tourSelectA');
+            const selectB = document.getElementById('tourSelectB');
+            const btn = document.getElementById('compareBtn');
+            const err = document.getElementById('compareError');
+            const resultWrap = document.getElementById('compareResult');
+            const evalWrap = document.getElementById('compareEval');
+            const evalList = document.getElementById('compareEvalList');
+
+            const aId = selectA.value;
+            const bId = selectB.value;
+
+            if (!aId || !bId || aId === bId) {
+                err.textContent = 'Lütfen iki farklı tur seçiniz.';
+                err.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Karşılaştırılıyor...';
+            err.style.display = 'none';
+            err.textContent = '';
+
+            try {
+                const [tourA, tourB] = await Promise.all([fetchTourDetail(aId), fetchTourDetail(bId)]);
+
+                // Column headers
+                setText('colTourA', tourA?.turAdi || 'Tur A', false);
+                setText('colTourB', tourB?.turAdi || 'Tur B', false);
+
+                // Rows
+                setText('rowPriceA', tourA?.fiyat == null ? '-' : formatCurrencyTRY(tourA.fiyat));
+                setText('rowPriceB', tourB?.fiyat == null ? '-' : formatCurrencyTRY(tourB.fiyat));
+
+                setText('rowCapacityA', tourA?.kapasite == null ? '-' : formatNumber(tourA.kapasite));
+                setText('rowCapacityB', tourB?.kapasite == null ? '-' : formatNumber(tourB.kapasite));
+
+                setText('rowOccA', tourA?.dolulukOrani == null ? '-' : formatPercent(tourA.dolulukOrani));
+                setText('rowOccB', tourB?.dolulukOrani == null ? '-' : formatPercent(tourB.dolulukOrani));
+
+                setText('rowDurationA', tourA?.sureGun == null ? '-' : formatNumber(tourA.sureGun));
+                setText('rowDurationB', tourB?.sureGun == null ? '-' : formatNumber(tourB.sureGun));
+
+                resultWrap.style.display = 'block';
+
+                // Evaluation
+                const insights = buildComparisonInsights(tourA, tourB);
+                evalList.innerHTML = '';
+                insights.forEach(line => {
+                    const li = document.createElement('li');
+                    li.textContent = line;
+                    evalList.appendChild(li);
+                });
+                evalWrap.style.display = 'block';
+            } catch (error) {
+                console.error('Karşılaştırma sırasında hata:', error);
+                err.textContent = 'Karşılaştırma verileri yüklenirken bir hata oluştu.';
+                err.style.display = 'block';
+                resultWrap.style.display = 'none';
+                evalWrap.style.display = 'none';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Karşılaştır';
+            }
+        }
+
+        // Load charts when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTourAnalysisByType();
+            loadOccupancyByType();
+            loadTourOptions();
+
+            const btn = document.getElementById('compareBtn');
+            if (btn) btn.addEventListener('click', compareTours);
+        });
+    </script>
 </body>
 </html>

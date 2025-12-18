@@ -183,6 +183,77 @@ app.get('/api/kpi/monthly-insights', async (req, res) => {
   }
 });
 
+// Home Highlights endpoint (Bu Ayın Öne Çıkan Turları)
+app.get('/api/home/featured-tours', async (req, res) => {
+  try {
+    // En Karlı Tur: Bu ay (son 1 ay) rezervasyonlardan tur bazında toplam kârı en yüksek olan
+    const [profitRows] = await pool.query(
+      `SELECT t.tur_id, t.tur_adi, COALESCE(SUM(r.kar), 0) AS toplam_kar
+       FROM rezervasyon r
+       JOIN turlar t ON r.tur_id = t.tur_id
+       WHERE r.rezervasyon_tarihi >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+       GROUP BY t.tur_id, t.tur_adi
+       ORDER BY toplam_kar DESC
+       LIMIT 1`
+    );
+
+    const topProfitableTour = profitRows[0]
+      ? {
+          turId: profitRows[0].tur_id,
+          turAdi: profitRows[0].tur_adi,
+          toplamKar: parseFloat(profitRows[0].toplam_kar) || 0
+        }
+      : null;
+
+    // En Riskli Tur: Bu ay (son 1 ay) rezervasyonu olan turlar içinde ortalama doluluk oranı en düşük olan
+    const [riskRows] = await pool.query(
+      `SELECT t.tur_id, t.tur_adi, COALESCE(AVG(t.doluluk_orani), 0) AS ortalama_doluluk
+       FROM rezervasyon r
+       JOIN turlar t ON r.tur_id = t.tur_id
+       WHERE r.rezervasyon_tarihi >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+       GROUP BY t.tur_id, t.tur_adi
+       ORDER BY ortalama_doluluk ASC
+       LIMIT 1`
+    );
+
+    let riskiestTour = riskRows[0]
+      ? {
+          turId: riskRows[0].tur_id,
+          turAdi: riskRows[0].tur_adi,
+          ortalamaDoluluk: parseFloat(riskRows[0].ortalama_doluluk) || 0
+        }
+      : null;
+
+    // Fallback: Eğer bu ay rezervasyonu yoksa, tüm turlar içinde doluluk_orani en düşük olanı getir
+    if (!riskiestTour) {
+      const [fallbackRows] = await pool.query(
+        `SELECT tur_id, tur_adi, COALESCE(doluluk_orani, 0) AS ortalama_doluluk
+         FROM turlar
+         ORDER BY doluluk_orani ASC
+         LIMIT 1`
+      );
+      riskiestTour = fallbackRows[0]
+        ? {
+            turId: fallbackRows[0].tur_id,
+            turAdi: fallbackRows[0].tur_adi,
+            ortalamaDoluluk: parseFloat(fallbackRows[0].ortalama_doluluk) || 0
+          }
+        : null;
+    }
+
+    res.json({
+      topProfitableTour,
+      riskiestTour
+    });
+  } catch (error) {
+    console.error('Error fetching home featured tours:', error);
+    res.status(500).json({
+      error: 'Failed to fetch home featured tours',
+      message: error.message
+    });
+  }
+});
+
 // Critical Occupancy Alerts endpoint
 app.get('/api/alerts/critical-occupancy', async (req, res) => {
   try {
@@ -220,6 +291,154 @@ app.get('/api/alerts/critical-occupancy', async (req, res) => {
     console.error('Error fetching critical occupancy alerts:', error);
     res.status(500).json({
       error: 'Failed to fetch critical occupancy alerts',
+      message: error.message
+    });
+  }
+});
+
+// Tour Analysis by Type endpoint - Reservations per Tour Type
+app.get('/api/tour-analysis/by-type', async (req, res) => {
+  try {
+    // Get reservation count per tour type
+    const [results] = await pool.query(
+      `SELECT t.tur_turu, COUNT(r.rezervasyon_id) AS rezervasyon_sayisi
+       FROM rezervasyon r
+       JOIN turlar t ON r.tur_id = t.tur_id
+       GROUP BY t.tur_turu
+       ORDER BY rezervasyon_sayisi DESC`
+    );
+
+    const tourTypes = results.map(row => ({
+      turTuru: row.tur_turu,
+      rezervasyonSayisi: parseInt(row.rezervasyon_sayisi)
+    }));
+
+    res.json({
+      tourTypes: tourTypes
+    });
+  } catch (error) {
+    console.error('Error fetching tour analysis by type:', error);
+    res.status(500).json({
+      error: 'Failed to fetch tour analysis by type',
+      message: error.message
+    });
+  }
+});
+
+// Tour Analysis Average Occupancy by Type endpoint
+app.get('/api/tour-analysis/avg-occupancy-by-type', async (req, res) => {
+  try {
+    // Get average occupancy per tour type
+    const [results] = await pool.query(
+      `SELECT tur_turu, AVG(doluluk_orani) AS ortalama_doluluk
+       FROM turlar
+       GROUP BY tur_turu
+       ORDER BY ortalama_doluluk DESC`
+    );
+
+    const tourTypes = results.map(row => ({
+      turTuru: row.tur_turu,
+      ortalamaDoluluk: parseFloat(row.ortalama_doluluk) || 0
+    }));
+
+    res.json({
+      tourTypes: tourTypes
+    });
+  } catch (error) {
+    console.error('Error fetching average occupancy by type:', error);
+    res.status(500).json({
+      error: 'Failed to fetch average occupancy by type',
+      message: error.message
+    });
+  }
+});
+
+// Tours list endpoint (for dropdown options)
+app.get('/api/tours', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT tur_id, tur_adi
+       FROM turlar
+       ORDER BY tur_adi ASC`
+    );
+
+    res.json({
+      tours: rows.map(r => ({
+        turId: r.tur_id,
+        turAdi: r.tur_adi
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching tours list:', error);
+    res.status(500).json({
+      error: 'Failed to fetch tours list',
+      message: error.message
+    });
+  }
+});
+
+// Tour detail endpoint (for comparison table)
+app.get('/api/tours/:turId', async (req, res) => {
+  try {
+    const turId = req.params.turId;
+    if (!turId) {
+      return res.status(400).json({ error: 'turId is required' });
+    }
+
+    // Detect column names safely (do not assume schema changes)
+    const [colRows] = await pool.query(
+      `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+       WHERE TABLE_SCHEMA = DATABASE()
+         AND TABLE_NAME = ?`,
+      ['turlar']
+    );
+
+    const cols = new Set(colRows.map(r => String(r.COLUMN_NAME)));
+    const pick = (candidates) => candidates.find(c => cols.has(c)) || null;
+
+    const fiyatCol = pick(['fiyat', 'tur_fiyati', 'ucret', 'tur_ucreti', 'fiyat_tl']);
+    const kapasiteCol = pick(['kapasite', 'kontenjan', 'kisi_sayisi', 'max_kapasite']);
+    // Süre (gün) alanı: turlar.tur_gunu (istenen kolon)
+    // (Diğer olası kolon adlarını da geriye dönük uyumluluk için listede tutuyoruz.)
+    const sureCol = pick(['tur_gunu', 'sure_gun', 'sure', 'tur_suresi', 'gun_sayisi']);
+
+    const selectParts = [
+      '`tur_id` AS tur_id',
+      '`tur_adi` AS tur_adi',
+      (fiyatCol ? `\`${fiyatCol}\` AS fiyat` : 'NULL AS fiyat'),
+      (kapasiteCol ? `\`${kapasiteCol}\` AS kapasite` : 'NULL AS kapasite'),
+      '`doluluk_orani` AS doluluk_orani',
+      (sureCol ? `\`${sureCol}\` AS sure_gun` : 'NULL AS sure_gun')
+    ];
+
+    const [rows] = await pool.query(
+      `SELECT ${selectParts.join(', ')}
+       FROM turlar
+       WHERE tur_id = ?
+       LIMIT 1`,
+      [turId]
+    );
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: 'Tur bulunamadı' });
+    }
+
+    const t = rows[0];
+    res.json({
+      tur: {
+        turId: t.tur_id,
+        turAdi: t.tur_adi,
+        fiyat: t.fiyat === null ? null : Number(t.fiyat),
+        kapasite: t.kapasite === null ? null : Number(t.kapasite),
+        dolulukOrani: t.doluluk_orani === null ? null : Number(t.doluluk_orani),
+        sureGun: t.sure_gun === null ? null : Number(t.sure_gun)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching tour detail:', error);
+    res.status(500).json({
+      error: 'Failed to fetch tour detail',
       message: error.message
     });
   }
