@@ -100,9 +100,17 @@
 
         .page-title {
             font-size: 32px;
-            margin-bottom: 30px;
+            margin-bottom: 12px;
             color: #333;
             font-weight: 600;
+        }
+
+        .page-description {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            font-weight: 400;
         }
 
         /* KPI Cards */
@@ -175,29 +183,25 @@
             padding: 30px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
-        }
-
-        .comparison-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
+            flex-direction: column;
         }
 
         .comparison-title {
             font-size: 20px;
             font-weight: 600;
             color: #333;
-            margin: 0;
-            flex: 1;
+            margin: 0 0 10px 0;
+            padding-top: 0;
+            white-space: nowrap;
         }
 
         .comparison-controls {
             display: flex;
             align-items: center;
             gap: 10px;
+            justify-content: flex-end;
+            margin-bottom: 25px;
         }
 
         .comparison-controls label {
@@ -227,10 +231,12 @@
             box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
         }
 
-        .chart-wrapper {
+        .comparison-section .chart-wrapper {
             position: relative;
             height: 400px;
             width: 100%;
+            margin-top: auto;
+            margin-bottom: auto;
         }
 
         .chart-loading {
@@ -265,6 +271,7 @@
             font-weight: 600;
             color: #333;
             margin: 0 0 25px 0;
+            padding-top: 0;
         }
 
         .roi-insight {
@@ -291,6 +298,19 @@
         .roi-insight-icon {
             font-weight: 600;
             margin-right: 8px;
+        }
+
+        /* Charts Row: Side by Side Layout */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .charts-row .comparison-section,
+        .charts-row .roi-ranking-section {
+            margin-bottom: 0;
         }
 
         /* What-If Senaryo Analizi Section */
@@ -497,6 +517,12 @@
             font-style: normal;
         }
 
+        @media (max-width: 1200px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .whatif-controls {
                 grid-template-columns: 1fr;
@@ -621,18 +647,18 @@
         }
 
         .matrix-cell.high {
-            background: #d4edda !important;
-            color: #155724;
+            background: #1976d2 !important;
+            color: #ffffff;
         }
 
         .matrix-cell.medium {
-            background: #fff3cd !important;
-            color: #856404;
+            background: #64b5f6 !important;
+            color: #ffffff;
         }
 
         .matrix-cell.low {
-            background: #f8d7da !important;
-            color: #721c24;
+            background: #e3f2fd !important;
+            color: #1976d2;
         }
 
         .matrix-cell.zero {
@@ -698,41 +724,12 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="page-title">Kampanya Etki Analizi</h1>
+        <p class="page-description">Bu sayfa, kampanyalı ve kampanyasız rezervasyonları karşılaştırarak kampanyaların satış ve kârlılık üzerindeki etkisini analiz etmeyi amaçlar.</p>
         
-        <!-- KPI Cards -->
-        <div class="kpi-section" id="campaignKpiSection">
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <span class="kpi-card-icon">📊</span>
-                    <h3>Kampanyalı Rezervasyon Oranı (%)</h3>
-                </div>
-                <div class="kpi-value" id="campaignReservationRate">
-                    <span class="kpi-loading">Yükleniyor...</span>
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <span class="kpi-card-icon">💰</span>
-                    <h3>Kampanyalı Rezervasyonlardan Toplam Kâr</h3>
-                </div>
-                <div class="kpi-value" id="campaignTotalProfit">
-                    <span class="kpi-loading">Yükleniyor...</span>
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-card-header">
-                    <span class="kpi-card-icon">⚠️</span>
-                    <h3>Kampanya Olmasına Rağmen Düşük Doluluklu Tur Sayısı</h3>
-                </div>
-                <div class="kpi-value" id="lowOccupancyCampaignTourCount">
-                    <span class="kpi-loading">Yükleniyor...</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Kampanyalı vs Kampanyasız Karşılaştırma -->
-        <section class="comparison-section" aria-label="Kampanyalı vs Kampanyasız Karşılaştırma">
-            <div class="comparison-header">
+        <!-- Charts Row: Side by Side Layout -->
+        <div class="charts-row">
+            <!-- Kampanyalı vs Kampanyasız Karşılaştırma -->
+            <section class="comparison-section" aria-label="Kampanyalı vs Kampanyasız Karşılaştırma">
                 <h2 class="comparison-title">Kampanyalı vs Kampanyasız Karşılaştırma</h2>
                 <div class="comparison-controls">
                     <label for="comparisonMetric">Metrik Seç:</label>
@@ -743,41 +740,32 @@
                         <option value="ortalama_doluluk_orani">Ortalama Doluluk Oranı</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="chart-wrapper">
-                <canvas id="comparisonChart"></canvas>
-                <div id="comparisonLoading" class="chart-loading">Yükleniyor...</div>
-                <div id="comparisonError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
-            </div>
-        </section>
+                <div class="chart-wrapper">
+                    <canvas id="comparisonChart"></canvas>
+                    <div id="comparisonLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="comparisonError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+            </section>
 
-        <!-- Kampanya Bazlı ROI Sıralaması -->
-        <section class="roi-ranking-section" aria-label="Kampanya Bazlı ROI Sıralaması">
-            <h2 class="roi-ranking-title">Kampanya Bazlı ROI Sıralaması</h2>
-            
-            <div class="chart-wrapper" style="height: 500px;">
-                <canvas id="roiRankingChart"></canvas>
-                <div id="roiRankingLoading" class="chart-loading">Yükleniyor...</div>
-                <div id="roiRankingError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
-            </div>
+            <!-- Kampanya Bazlı ROI Sıralaması -->
+            <section class="roi-ranking-section" aria-label="Kampanya Bazlı ROI Sıralaması">
+                <h2 class="roi-ranking-title">Kampanya Bazlı ROI Sıralaması</h2>
+                
+                <div class="chart-wrapper" style="height: 500px;">
+                    <canvas id="roiRankingChart"></canvas>
+                    <div id="roiRankingLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="roiRankingError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
 
-            <div id="roiInsight" class="roi-insight"></div>
-        </section>
+                <div id="roiInsight" class="roi-insight"></div>
+            </section>
+        </div>
 
         <!-- Campaign Impact Matrix (Campaign vs Tour Type) -->
         <section class="impact-matrix-section" aria-label="Campaign Impact Matrix">
             <div class="impact-matrix-header">
-                <h2 class="impact-matrix-title">Campaign Impact Matrix (Campaign vs Tour Type)</h2>
-                <div class="impact-matrix-controls">
-                    <label for="matrixMetricSelect">Metrik Seç:</label>
-                    <select id="matrixMetricSelect">
-                        <option value="avg_profit">Ortalama Kâr</option>
-                        <option value="total_profit">Toplam Kâr</option>
-                        <option value="reservation_count">Rezervasyon Sayısı</option>
-                        <option value="avg_occupancy">Ortalama Doluluk Oranı</option>
-                    </select>
-                </div>
+                <h2 class="impact-matrix-title">Kampanya Etki Matrisi</h2>
             </div>
 
             <div class="impact-matrix-wrapper">
@@ -930,52 +918,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
     <script>
-        // Fetch and display Campaign KPI data
-        async function loadCampaignKPIs() {
-            try {
-                const response = await fetch('/api/campaign/kpis');
-                if (!response.ok) {
-                    throw new Error('API yanıtı alınamadı');
-                }
-                const data = await response.json();
-
-                // Update Campaign Reservation Rate (%)
-                const rateEl = document.getElementById('campaignReservationRate');
-                if (rateEl) {
-                    rateEl.textContent = parseFloat(data.campaignReservationRate).toLocaleString('tr-TR', {
-                        minimumFractionDigits: 1,
-                        maximumFractionDigits: 1
-                    }) + '%';
-                }
-
-                // Update Campaign Total Profit (₺)
-                const profitEl = document.getElementById('campaignTotalProfit');
-                if (profitEl) {
-                    profitEl.textContent = parseFloat(data.campaignTotalProfit).toLocaleString('tr-TR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) + ' ₺';
-                }
-
-                // Update Low Occupancy Campaign Tour Count
-                const countEl = document.getElementById('lowOccupancyCampaignTourCount');
-                if (countEl) {
-                    countEl.textContent = data.lowOccupancyCampaignTourCount.toLocaleString('tr-TR');
-                }
-            } catch (error) {
-                console.error('Kampanya KPI verisi yüklenirken hata:', error);
-                
-                // Show error messages
-                const rateEl = document.getElementById('campaignReservationRate');
-                const profitEl = document.getElementById('campaignTotalProfit');
-                const countEl = document.getElementById('lowOccupancyCampaignTourCount');
-                
-                if (rateEl) rateEl.innerHTML = '<span class="kpi-error">Hata</span>';
-                if (profitEl) profitEl.innerHTML = '<span class="kpi-error">Hata</span>';
-                if (countEl) countEl.innerHTML = '<span class="kpi-error">Hata</span>';
-            }
-        }
-
         // -----------------------------
         // Kampanyalı vs Kampanyasız Karşılaştırma Chart
         // -----------------------------
@@ -986,7 +928,7 @@
             Chart.register(ChartDataLabels);
         }
 
-        // Get metric label in Turkish
+        // Get metric label in Turkish (for Y-axis and labels)
         function getMetricLabel(metric) {
             const labels = {
                 'rezervasyon_sayisi': 'Rezervasyon Sayısı',
@@ -1324,10 +1266,8 @@
             }
         }
 
-        // Load KPI data when page loads
+        // Load data when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            loadCampaignKPIs();
-            
             // Load comparison chart with default metric
             loadComparisonChart('rezervasyon_sayisi');
             
@@ -1349,15 +1289,7 @@
             loadWhatIfRemovalScenario();
 
             // Load impact matrix
-            loadImpactMatrix('avg_profit');
-            
-            // Add event listener for metric dropdown
-            const matrixMetricSelect = document.getElementById('matrixMetricSelect');
-            if (matrixMetricSelect) {
-                matrixMetricSelect.addEventListener('change', function() {
-                    loadImpactMatrix(this.value);
-                });
-            }
+            loadImpactMatrix();
         });
 
         // -----------------------------
@@ -1658,21 +1590,12 @@
             }
         }
 
-        function formatMatrixValue(value, metric) {
+        function formatMatrixValue(value) {
             if (value === null || value === undefined || isNaN(value)) {
                 return '-';
             }
             
-            if (metric === 'reservationCount') {
-                return parseInt(value).toLocaleString('tr-TR');
-            } else if (metric === 'avgOccupancy') {
-                return parseFloat(value).toFixed(1) + '%';
-            } else {
-                return parseFloat(value).toLocaleString('tr-TR', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }) + ' ₺';
-            }
+            return parseInt(value).toLocaleString('tr-TR');
         }
 
         function getMetricLabel(metricValue) {
@@ -1685,7 +1608,7 @@
             return labels[metricValue] || metricValue;
         }
 
-        async function loadImpactMatrix(metric = 'avg_profit') {
+        async function loadImpactMatrix() {
             const headerEl = document.getElementById('impactMatrixHeader');
             const bodyEl = document.getElementById('impactMatrixBody');
             const errorEl = document.getElementById('impactMatrixError');
@@ -1698,7 +1621,7 @@
                 errorEl.style.display = 'none';
                 insightEl.style.display = 'none';
 
-                const response = await fetch(`/api/campaign-impact-matrix?metric=${metric}`);
+                const response = await fetch(`/api/campaign-impact-matrix?metric=reservation_count`);
                 if (!response.ok) {
                     throw new Error('API yanıtı alınamadı');
                 }
@@ -1726,10 +1649,10 @@
                         const value = data.matrix[campaign] && data.matrix[campaign][tourType] !== undefined
                             ? data.matrix[campaign][tourType]
                             : null;
-                        const formattedValue = formatMatrixValue(value, data.metric);
+                        const formattedValue = formatMatrixValue(value);
                         const cellClass = getMatrixCellClass(value, data.valueRange.min, data.valueRange.max);
                         
-                        bodyHTML += `<td class="matrix-cell ${cellClass}" title="${getMetricLabel(data.metric)}: ${formattedValue}">${formattedValue}</td>`;
+                        bodyHTML += `<td class="matrix-cell ${cellClass}" title="Rezervasyon Sayısı: ${formattedValue}">${formattedValue}</td>`;
                     });
                     bodyHTML += '</tr>';
                 });
@@ -1737,7 +1660,7 @@
 
                 // Update insight
                 if (data.bestCombination && data.bestCombination.campaign && data.bestCombination.tourType) {
-                    const bestValue = formatMatrixValue(data.bestCombination.value, data.metric);
+                    const bestValue = formatMatrixValue(data.bestCombination.value);
                     insightEl.innerHTML = `En verimli kampanya-tur kombinasyonu: <strong>${data.bestCombination.campaign}</strong> – <strong>${data.bestCombination.tourType}</strong> (${bestValue})`;
                     insightEl.style.display = 'block';
                 }

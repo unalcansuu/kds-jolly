@@ -100,9 +100,17 @@
 
         .page-title {
             font-size: 32px;
-            margin-bottom: 30px;
+            margin-bottom: 12px;
             color: #333;
             font-weight: 600;
+        }
+
+        .page-description {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            font-weight: 400;
         }
 
         .charts-row {
@@ -236,7 +244,8 @@
 
         /* Tur Bazlı Karşılaştırma Analizi */
         .compare-section {
-            margin-top: 22px;
+            margin-top: 0;
+            margin-bottom: 30px;
         }
 
         .compare-header {
@@ -289,12 +298,17 @@
         .compare-btn {
             height: 38px;
             padding: 0 14px;
-            border: 1px solid rgba(227, 6, 19, 0.25);
-            background: #E30613;
+            border: 1px solid rgba(47, 58, 74, 0.25);
+            background: #2F3A4A;
             color: #fff;
             border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
+            transition: background-color 0.25s;
+        }
+
+        .compare-btn:hover:not(:disabled) {
+            background-color: #3A4557;
         }
 
         .compare-btn:disabled {
@@ -442,51 +456,8 @@
     <!-- Main Content -->
     <main class="main-content">
         <h1 class="page-title">Tur Analizi</h1>
+        <p class="page-description">Bu sayfa, tur türlerinin performansını karşılaştırmalı olarak analiz ederek doluluk, talep ve trend verilerine dayalı karar alınmasını destekler.</p>
         
-        <!-- Charts Row -->
-        <div class="charts-row">
-            <!-- Reservation Distribution Chart -->
-            <div class="chart-container">
-                <div class="chart-title-wrapper">
-                    <h2 class="chart-title">Tur Türlerine Göre Rezervasyon Dağılımı</h2>
-                    <div class="chart-insight-badge" id="reservationLeaderBadge" style="display: none;">
-                        <span class="chart-insight-badge-icon">⭐</span>
-                        <span id="reservationLeaderText"></span>
-                    </div>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="tourTypeChart"></canvas>
-                    <div id="chartLoading" class="chart-loading">Yükleniyor...</div>
-                    <div id="chartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
-                </div>
-            </div>
-
-            <!-- Average Occupancy Chart -->
-            <div class="chart-container">
-                <div class="chart-title-wrapper">
-                    <h2 class="chart-title">Tur Türlerine Göre Ortalama Doluluk Oranı</h2>
-                </div>
-                <div class="chart-wrapper">
-                    <canvas id="occupancyChart"></canvas>
-                    <div id="occupancyChartLoading" class="chart-loading">Yükleniyor...</div>
-                    <div id="occupancyChartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analysis Info Box -->
-        <div class="analysis-info-box">
-            <div class="analysis-info-header">
-                <span class="analysis-info-icon">📌</span>
-                <h2 class="analysis-info-title">Analitik Değerlendirme</h2>
-            </div>
-            <div class="analysis-info-content">
-                <ul class="analysis-info-list" id="analyticalEvaluationList">
-                    <li class="analysis-loading">Yükleniyor...</li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Tur Bazlı Karşılaştırma Analizi -->
         <section class="compare-section" aria-label="Tur Bazlı Karşılaştırma Analizi">
             <div class="compare-header">
@@ -557,6 +528,50 @@
                 </div>
             </div>
         </section>
+        
+        <!-- Charts Row -->
+        <div class="charts-row">
+            <!-- Reservation Distribution Chart -->
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Türlerine Göre Rezervasyon Dağılımı</h2>
+                    <div class="chart-insight-badge" id="reservationLeaderBadge" style="display: none;">
+                        <span class="chart-insight-badge-icon">⭐</span>
+                        <span id="reservationLeaderText"></span>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="tourTypeChart"></canvas>
+                    <div id="chartLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="chartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+            </div>
+
+            <!-- Average Occupancy Chart -->
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Türlerine Göre Ortalama Doluluk Oranı</h2>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="occupancyChart"></canvas>
+                    <div id="occupancyChartLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="occupancyChartError" class="chart-error" style="display: none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Info Box -->
+        <div class="analysis-info-box">
+            <div class="analysis-info-header">
+                <span class="analysis-info-icon">📌</span>
+                <h2 class="analysis-info-title">Analitik Değerlendirme</h2>
+            </div>
+            <div class="analysis-info-content">
+                <ul class="analysis-info-list" id="analyticalEvaluationList">
+                    <li class="analysis-loading">Yükleniyor...</li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Tur Süresine Göre Tercih Analizi -->
         <section class="duration-analysis-section" aria-label="Tur Süresine Göre Tercih Analizi">
@@ -658,15 +673,15 @@
                     // Calculate total for percentage calculation
                     const total = counts.reduce((sum, count) => sum + count, 0);
 
-                    // Professional color palette for tour types
+                    // Pastel color palette for tour types (enhanced contrast)
                     const colorPalette = [
-                        '#E30613', // Jolly Red
-                        '#3498db', // Blue
-                        '#2ecc71', // Green
-                        '#f39c12', // Orange
-                        '#9b59b6', // Purple
-                        '#1abc9c', // Turquoise
-                        '#e67e22'  // Dark Orange
+                        '#FF9AA2', // Pastel Red (enhanced)
+                        '#8EC5E8', // Pastel Blue (enhanced)
+                        '#9DD9A8', // Pastel Green (enhanced)
+                        '#FFC085', // Pastel Orange (enhanced)
+                        '#C5A3E0', // Pastel Purple (enhanced)
+                        '#9DD9D0', // Pastel Turquoise (enhanced)
+                        '#FFB085'  // Pastel Coral (enhanced)
                     ];
 
                     // Assign colors to each tour type
@@ -1198,7 +1213,30 @@
 
                 if (durationChart) durationChart.destroy();
 
-                const barColors = ['#6BB7FF', '#69D3B7', '#8ED6A8']; // soft blue/green tones
+                // Calculate value-based blue gradient colors
+                // Higher values get darker blue, lower values get lighter blue
+                const maxValue = Math.max(...values);
+                const minValue = Math.min(...values);
+                const valueRange = maxValue - minValue;
+                
+                const barColors = values.map(value => {
+                    // If all values are the same, use middle blue
+                    if (valueRange === 0) {
+                        return '#5BA0E8';
+                    }
+                    
+                    // Calculate intensity: 0 (lowest) to 1 (highest)
+                    const intensity = (value - minValue) / valueRange;
+                    
+                    // Blue gradient: light blue (#A8D5E2) to dark blue (#2E5C8A)
+                    // Light blue RGB: (168, 213, 226)
+                    // Dark blue RGB: (46, 92, 138)
+                    const r = Math.round(168 - (168 - 46) * intensity);
+                    const g = Math.round(213 - (213 - 92) * intensity);
+                    const b = Math.round(226 - (226 - 138) * intensity);
+                    
+                    return `rgb(${r}, ${g}, ${b})`;
+                });
 
                 durationChart = new Chart(ctx, {
                     type: 'bar',
@@ -1291,7 +1329,8 @@
             const keys = [];
             const d = new Date();
             d.setDate(1);
-            for (let i = n - 1; i >= 0; i--) {
+            // Shift back by 1 month to get last 3 completed months (excluding current month)
+            for (let i = n; i >= 1; i--) {
                 const dt = new Date(d.getFullYear(), d.getMonth() - i, 1);
                 const y = dt.getFullYear();
                 const m = String(dt.getMonth() + 1).padStart(2, '0');
@@ -1388,6 +1427,21 @@
                         plugins: {
                             legend: {
                                 position: 'bottom',
+                                onClick: (e, legendItem, legend) => {
+                                    const index = legendItem.datasetIndex;
+                                    const chart = legend.chart;
+                                    const meta = chart.getDatasetMeta(index);
+                                    
+                                    // Toggle visibility of the dataset
+                                    if (meta.hidden === null) {
+                                        meta.hidden = true;
+                                    } else {
+                                        meta.hidden = null;
+                                    }
+                                    
+                                    // Update chart to reflect changes
+                                    chart.update();
+                                },
                                 labels: {
                                     boxWidth: 12,
                                     boxHeight: 12,

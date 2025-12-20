@@ -108,6 +108,40 @@ app.get('/api/kpi/monthly-profit', async (req, res) => {
   }
 });
 
+// Profit Forecast Data endpoint (Last 3 months)
+app.get('/api/kpi/profit-forecast-data', async (req, res) => {
+  try {
+    // Get profit data for last 3 months (excluding current month)
+    // Months: 2025-09, 2025-10, 2025-11 (if current is 2025-12)
+    const [profitRows] = await pool.query(
+      `SELECT 
+        DATE_FORMAT(rezervasyon_tarihi, '%Y-%m') AS ay_label,
+        COALESCE(SUM(kar), 0) as toplam_kar
+       FROM rezervasyon 
+       WHERE rezervasyon_tarihi >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 3 MONTH)
+         AND rezervasyon_tarihi < DATE_FORMAT(CURDATE(), '%Y-%m-01')
+       GROUP BY DATE_FORMAT(rezervasyon_tarihi, '%Y-%m')
+       ORDER BY ay_label ASC`
+    );
+    
+    // Format response with month labels and profit values
+    const profitData = profitRows.map(row => ({
+      month: row.ay_label,
+      profit: parseFloat(row.toplam_kar) || 0
+    }));
+
+    res.json({
+      profitData
+    });
+  } catch (error) {
+    console.error('Error fetching profit forecast data:', error);
+    res.status(500).json({
+      error: 'Failed to fetch profit forecast data',
+      message: error.message
+    });
+  }
+});
+
 // Monthly Insights endpoint
 app.get('/api/kpi/monthly-insights', async (req, res) => {
   try {
