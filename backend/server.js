@@ -1200,6 +1200,550 @@ app.get('/api/campaign-impact-matrix', async (req, res) => {
   }
 });
 
+// Age Distribution endpoint (Anket Analizi)
+app.get('/api/anket/age-distribution', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT 
+        CASE
+          WHEN yas BETWEEN 18 AND 24 THEN '18-24'
+          WHEN yas BETWEEN 25 AND 34 THEN '25-34'
+          WHEN yas BETWEEN 35 AND 44 THEN '35-44'
+          WHEN yas BETWEEN 45 AND 54 THEN '45-54'
+          WHEN yas >= 55 THEN '55+'
+        END AS yas_grubu,
+        COUNT(*) AS sayi
+       FROM musteriler
+       WHERE yas IS NOT NULL AND yas > 0
+       GROUP BY yas_grubu
+       ORDER BY FIELD(yas_grubu, '18-24', '25-34', '35-44', '45-54', '55+')`
+    );
+
+    // Initialize all age groups with 0 (only valid age groups, no 'Bilinmiyor')
+    const ageGroups = ['18-24', '25-34', '35-44', '45-54', '55+'];
+    const counts = new Array(ageGroups.length).fill(0);
+
+    // Map results to arrays
+    rows.forEach(row => {
+      const index = ageGroups.indexOf(row.yas_grubu);
+      if (index !== -1) {
+        counts[index] = parseInt(row.sayi) || 0;
+      }
+    });
+
+    // Calculate total
+    const total = counts.reduce((sum, count) => sum + count, 0);
+
+    res.json({
+      labels: ageGroups,
+      counts: counts,
+      total: total
+    });
+  } catch (error) {
+    console.error('Error fetching age distribution:', error);
+    res.status(500).json({
+      error: 'Failed to fetch age distribution',
+      message: error.message
+    });
+  }
+});
+
+// Age Group × Tour Type Heatmap endpoint (Anket Analizi)
+app.get('/api/analytics/age-tour-heatmap', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+        CASE
+          WHEN m.yas BETWEEN 18 AND 24 THEN '18-24'
+          WHEN m.yas BETWEEN 25 AND 34 THEN '25-34'
+          WHEN m.yas BETWEEN 35 AND 44 THEN '35-44'
+          WHEN m.yas BETWEEN 45 AND 54 THEN '45-54'
+          WHEN m.yas >= 55 THEN '55+'
+          ELSE NULL
+        END AS yas_grubu,
+        t.tur_turu AS tur_turu,
+        COUNT(*) AS rezervasyon_sayisi
+       FROM rezervasyon r
+       JOIN musteriler m ON r.musteri_id = m.musteri_id
+       JOIN turlar t ON r.tur_id = t.tur_id
+       WHERE m.yas IS NOT NULL
+       GROUP BY yas_grubu, t.tur_turu
+       HAVING yas_grubu IS NOT NULL
+       ORDER BY 
+         FIELD(yas_grubu, '18-24', '25-34', '35-44', '45-54', '55+'),
+         t.tur_turu`
+    );
+
+    // Fixed age groups in order
+    const ageGroups = ['18-24', '25-34', '35-44', '45-54', '55+'];
+    
+    // Collect unique tour types and sort alphabetically
+    const tourTypesSet = new Set();
+    rows.forEach(row => {
+      if (row.tur_turu) {
+        tourTypesSet.add(row.tur_turu);
+      }
+    });
+    const tourTypes = Array.from(tourTypesSet).sort();
+
+    // Initialize matrix with zeros
+    const matrix = ageGroups.map(() => new Array(tourTypes.length).fill(0));
+
+    // Fill matrix with actual data
+    let maxValue = 0;
+    let topCell = { ageGroup: '', tourType: '', value: 0 };
+
+    rows.forEach(row => {
+      const ageIndex = ageGroups.indexOf(row.yas_grubu);
+      const tourIndex = tourTypes.indexOf(row.tur_turu);
+      
+      if (ageIndex !== -1 && tourIndex !== -1) {
+        const count = parseInt(row.rezervasyon_sayisi) || 0;
+        matrix[ageIndex][tourIndex] = count;
+        
+        // Track max value and top cell
+        if (count > maxValue) {
+          maxValue = count;
+          topCell = {
+            ageGroup: row.yas_grubu,
+            tourType: row.tur_turu,
+            value: count
+          };
+        }
+      }
+    });
+
+    res.json({
+      ageGroups: ageGroups,
+      tourTypes: tourTypes,
+      matrix: matrix,
+      maxValue: maxValue,
+      topCell: topCell
+    });
+  } catch (error) {
+    console.error('Error fetching age-tour heatmap:', error);
+    res.status(500).json({
+      error: 'Failed to fetch age-tour heatmap',
+      message: error.message
+    });
+  }
+});
+
+// Age Group × Campaign Sensitivity endpoint (Anket Analizi)
+app.get('/api/analytics/age-campaign-sensitivity', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+        CASE
+          WHEN m.yas BETWEEN 18 AND 24 THEN '18-24'
+          WHEN m.yas BETWEEN 25 AND 34 THEN '25-34'
+          WHEN m.yas BETWEEN 35 AND 44 THEN '35-44'
+          WHEN m.yas BETWEEN 45 AND 54 THEN '45-54'
+          WHEN m.yas >= 55 THEN '55+'
+          ELSE NULL
+        END AS yas_grubu,
+        CASE
+          WHEN r.kampanya_id IS NULL THEN 'Kampanyasız'
+          ELSE 'Kampanyalı'
+        END AS kampanya_durumu,
+        COUNT(*) AS rezervasyon_sayisi
+       FROM rezervasyon r
+       JOIN musteriler m ON m.musteri_id = r.musteri_id
+       WHERE m.yas IS NOT NULL AND m.yas > 0
+       GROUP BY yas_grubu, kampanya_durumu
+       HAVING yas_grubu IS NOT NULL
+       ORDER BY FIELD(yas_grubu, '18-24', '25-34', '35-44', '45-54', '55+'), kampanya_durumu`
+    );
+
+    // Fixed age groups in order
+    const ageGroups = ['18-24', '25-34', '35-44', '45-54', '55+'];
+    
+    // Initialize arrays for counts
+    const kampanyaliCounts = new Array(ageGroups.length).fill(0);
+    const kampanyasizCounts = new Array(ageGroups.length).fill(0);
+
+    // Fill counts from query results
+    rows.forEach(row => {
+      const ageIndex = ageGroups.indexOf(row.yas_grubu);
+      if (ageIndex !== -1) {
+        const count = parseInt(row.rezervasyon_sayisi) || 0;
+        if (row.kampanya_durumu === 'Kampanyalı') {
+          kampanyaliCounts[ageIndex] = count;
+        } else if (row.kampanya_durumu === 'Kampanyasız') {
+          kampanyasizCounts[ageIndex] = count;
+        }
+      }
+    });
+
+    // Calculate percentages
+    const kampanyaliPercentages = [];
+    const kampanyasizPercentages = [];
+    let topSensitive = { ageGroup: '', kampanyaliPct: 0 };
+
+    ageGroups.forEach((ageGroup, index) => {
+      const total = kampanyaliCounts[index] + kampanyasizCounts[index];
+      const kampanyaliPct = total > 0 ? (kampanyaliCounts[index] / total) * 100 : 0;
+      const kampanyasizPct = total > 0 ? (kampanyasizCounts[index] / total) * 100 : 0;
+
+      kampanyaliPercentages.push(parseFloat(kampanyaliPct.toFixed(2)));
+      kampanyasizPercentages.push(parseFloat(kampanyasizPct.toFixed(2)));
+
+      // Track top sensitive age group
+      if (kampanyaliPct > topSensitive.kampanyaliPct) {
+        topSensitive = {
+          ageGroup: ageGroup,
+          kampanyaliPct: parseFloat(kampanyaliPct.toFixed(2))
+        };
+      }
+    });
+
+    res.json({
+      ageGroups: ageGroups,
+      counts: {
+        'Kampanyalı': kampanyaliCounts,
+        'Kampanyasız': kampanyasizCounts
+      },
+      percentages: {
+        'Kampanyalı': kampanyaliPercentages,
+        'Kampanyasız': kampanyasizPercentages
+      },
+      topSensitive: topSensitive
+    });
+  } catch (error) {
+    console.error('Error fetching age-campaign sensitivity:', error);
+    res.status(500).json({
+      error: 'Failed to fetch age-campaign sensitivity',
+      message: error.message
+    });
+  }
+});
+
+// Top Priority Features endpoint (Anket Analizi)
+app.get('/api/anket/top-oncelikli-ozellikler', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+        TRIM(oncelikli_ozellikler) AS ozellik,
+        COUNT(*) AS adet
+       FROM anket_yanitlari
+       WHERE oncelikli_ozellikler IS NOT NULL
+         AND TRIM(oncelikli_ozellikler) <> ''
+       GROUP BY TRIM(oncelikli_ozellikler)
+       ORDER BY adet DESC
+       LIMIT 10`
+    );
+
+    const labels = rows.map(row => row.ozellik || 'İsimsiz');
+    const counts = rows.map(row => parseInt(row.adet) || 0);
+
+    res.json({
+      labels: labels,
+      counts: counts
+    });
+  } catch (error) {
+    console.error('Error fetching top priority features:', error);
+    res.status(500).json({
+      error: 'Failed to fetch top priority features',
+      message: error.message
+    });
+  }
+});
+
+// Activity Preferences endpoint (Anket Analizi)
+app.get('/api/anket/aktivite-tercihleri', async (req, res) => {
+  try {
+    // Try to query gormek_istedigi_aktivite column first
+    const [rows] = await pool.query(
+      `SELECT
+        TRIM(gormek_istedigi_aktivite) AS aktivite,
+        COUNT(*) AS adet
+       FROM anket_yanitlari
+       WHERE gormek_istedigi_aktivite IS NOT NULL
+         AND TRIM(gormek_istedigi_aktivite) <> ''
+       GROUP BY TRIM(gormek_istedigi_aktivite)
+       ORDER BY adet DESC
+       LIMIT 8`
+    );
+
+    if (!rows || rows.length === 0) {
+      // Return empty dataset if no data found
+      return res.json({
+        labels: [],
+        counts: [],
+        topActivity: null
+      });
+    }
+
+    const labels = rows.map(row => row.aktivite || 'İsimsiz');
+    const counts = rows.map(row => parseInt(row.adet) || 0);
+
+    // Find top activity
+    const maxIndex = counts.indexOf(Math.max(...counts));
+    const topActivity = {
+      name: labels[maxIndex],
+      count: counts[maxIndex]
+    };
+
+    res.json({
+      labels: labels,
+      counts: counts,
+      topActivity: topActivity
+    });
+  } catch (error) {
+    // If column doesn't exist, return empty dataset gracefully
+    console.error('Error fetching activity preferences:', error);
+    if (error.code === 'ER_BAD_FIELD_ERROR' || error.message.includes('Unknown column')) {
+      return res.json({
+        labels: [],
+        counts: [],
+        topActivity: null
+      });
+    }
+    res.status(500).json({
+      error: 'Failed to fetch activity preferences',
+      message: error.message
+    });
+  }
+});
+
+// Campaign Impact Score Distribution endpoint (Anket Analizi)
+app.get('/api/anket/kampanya-etkisi-dagilimi', async (req, res) => {
+  try {
+    // Query to get campaign impact scores
+    // Try to get numeric values from kampanya_etkisi column
+    let query = `
+      SELECT 
+        kampanya_etkisi AS cevap
+      FROM anket_yanitlari
+      WHERE kampanya_etkisi IS NOT NULL
+        AND TRIM(kampanya_etkisi) <> ''
+    `;
+
+    const [rows] = await pool.query(query);
+
+    if (!rows || rows.length === 0) {
+      return res.json({
+        segments: [
+          { segment: 'Düşük Etki (0–1)', count: 0 },
+          { segment: 'Orta Etki (2–3)', count: 0 },
+          { segment: 'Yüksek Etki (4–5)', count: 0 }
+        ],
+        total: 0,
+        avgScore: 0
+      });
+    }
+
+    // Function to convert answer to numeric score (0-5)
+    function mapAnswerToScore(answer) {
+      if (!answer) return null;
+      
+      const normalized = answer.toString().trim();
+      
+      // Check if already numeric
+      const numeric = parseInt(normalized);
+      if (!isNaN(numeric) && numeric >= 0 && numeric <= 5) {
+        return numeric;
+      }
+      
+      // Map Turkish text responses to numeric (0-5)
+      const lower = normalized.toLowerCase();
+      if (lower.includes('hiç') || lower.includes('etkilemedi') || lower.includes('yok') || lower.includes('0')) {
+        return 0;
+      }
+      if (lower.includes('az') && lower.includes('etkiledi')) {
+        return 1;
+      }
+      if (lower === '1' || (lower.includes('çok') === false && lower.includes('az') === false && lower.includes('orta') === false && lower.includes('etkiledi'))) {
+        return 1;
+      }
+      if (lower.includes('orta') || lower.includes('kararsız') || lower === '2' || lower === '3') {
+        return parseInt(normalized) || 3;
+      }
+      if (lower.includes('etkiledi') && !lower.includes('çok') && !lower.includes('az')) {
+        return 4;
+      }
+      if (lower.includes('çok') || lower.includes('kesinlikle') || lower.includes('çok etkiledi') || lower === '4' || lower === '5') {
+        return parseInt(normalized) || 5;
+      }
+      
+      return null;
+    }
+
+    // Initialize segment counts
+    const segmentCounts = {
+      'Düşük Etki (0–1)': 0,
+      'Orta Etki (2–3)': 0,
+      'Yüksek Etki (4–5)': 0
+    };
+
+    let totalScore = 0;
+    let validScores = 0;
+
+    // Process each row and segment scores
+    rows.forEach(row => {
+      const score = mapAnswerToScore(row.cevap);
+      if (score !== null && score >= 0 && score <= 5) {
+        if (score >= 0 && score <= 1) {
+          segmentCounts['Düşük Etki (0–1)']++;
+        } else if (score >= 2 && score <= 3) {
+          segmentCounts['Orta Etki (2–3)']++;
+        } else if (score >= 4 && score <= 5) {
+          segmentCounts['Yüksek Etki (4–5)']++;
+        }
+        totalScore += score;
+        validScores++;
+      }
+    });
+
+    const total = validScores;
+    const avgScore = validScores > 0 ? totalScore / validScores : 0;
+
+    const segments = [
+      { segment: 'Düşük Etki (0–1)', count: segmentCounts['Düşük Etki (0–1)'] },
+      { segment: 'Orta Etki (2–3)', count: segmentCounts['Orta Etki (2–3)'] },
+      { segment: 'Yüksek Etki (4–5)', count: segmentCounts['Yüksek Etki (4–5)'] }
+    ];
+
+    res.json({
+      segments: segments,
+      total: total,
+      avgScore: parseFloat(avgScore.toFixed(1))
+    });
+  } catch (error) {
+    console.error('Error fetching campaign impact distribution:', error);
+    // If column doesn't exist or query fails, return empty dataset gracefully
+    if (error.code === 'ER_BAD_FIELD_ERROR' || error.message.includes('Unknown column')) {
+      return res.json({
+        segments: [
+          { segment: 'Düşük Etki (0–1)', count: 0 },
+          { segment: 'Orta Etki (2–3)', count: 0 },
+          { segment: 'Yüksek Etki (4–5)', count: 0 }
+        ],
+        total: 0,
+        avgScore: 0
+      });
+    }
+    res.status(500).json({
+      error: 'Failed to fetch campaign impact distribution',
+      message: error.message
+    });
+  }
+});
+
+// Vacation Frequency Distribution endpoint (Anket Analizi)
+app.get('/api/anket/tatil-sikligi-dagilimi', async (req, res) => {
+  try {
+    // Query to get vacation frequency answers
+    // Try tatil_sikligi column (following the pattern of other question columns)
+    const [rows] = await pool.query(
+      `SELECT 
+        tatil_sikligi AS cevap
+       FROM anket_yanitlari
+       WHERE tatil_sikligi IS NOT NULL
+         AND TRIM(tatil_sikligi) <> ''`
+    );
+
+    if (!rows || rows.length === 0) {
+      return res.json({
+        labels: ['1', '2', '3', '4+'],
+        counts: [0, 0, 0, 0],
+        topLabel: null,
+        topCount: 0
+      });
+    }
+
+    // Function to convert answer to numeric value (1-4+)
+    function mapAnswerToValue(answer) {
+      if (!answer) return null;
+      
+      const normalized = answer.toString().trim();
+      
+      // Check if already numeric
+      const numeric = parseInt(normalized);
+      if (!isNaN(numeric) && numeric >= 1) {
+        return numeric >= 4 ? 4 : numeric; // Treat 4+ as 4
+      }
+      
+      // Handle text variations like "4+", "4 ve üzeri", etc.
+      const lower = normalized.toLowerCase();
+      if (lower.includes('4') && (lower.includes('+') || lower.includes('üzeri') || lower.includes('fazla'))) {
+        return 4;
+      }
+      if (normalized === '1' || lower.includes('bir')) {
+        return 1;
+      }
+      if (normalized === '2' || lower.includes('iki')) {
+        return 2;
+      }
+      if (normalized === '3' || lower.includes('üç')) {
+        return 3;
+      }
+      
+      return null;
+    }
+
+    // Initialize counts for each segment
+    const segmentCounts = {
+      '1': 0,
+      '2': 0,
+      '3': 0,
+      '4+': 0
+    };
+
+    // Process each row and count by segment
+    rows.forEach(row => {
+      const value = mapAnswerToValue(row.cevap);
+      if (value !== null && value >= 1) {
+        if (value === 1) {
+          segmentCounts['1']++;
+        } else if (value === 2) {
+          segmentCounts['2']++;
+        } else if (value === 3) {
+          segmentCounts['3']++;
+        } else if (value >= 4) {
+          segmentCounts['4+']++;
+        }
+      }
+    });
+
+    const labels = ['1', '2', '3', '4+'];
+    const counts = [
+      segmentCounts['1'],
+      segmentCounts['2'],
+      segmentCounts['3'],
+      segmentCounts['4+']
+    ];
+
+    // Find top segment
+    const maxCount = Math.max(...counts);
+    const maxIndex = counts.indexOf(maxCount);
+    const topLabel = maxCount > 0 ? labels[maxIndex] : null;
+    const topCount = maxCount;
+
+    res.json({
+      labels: labels,
+      counts: counts,
+      topLabel: topLabel,
+      topCount: topCount
+    });
+  } catch (error) {
+    // If column doesn't exist, return empty dataset gracefully
+    console.error('Error fetching vacation frequency distribution:', error);
+    if (error.code === 'ER_BAD_FIELD_ERROR' || error.message.includes('Unknown column')) {
+      return res.json({
+        labels: ['1', '2', '3', '4+'],
+        counts: [0, 0, 0, 0],
+        topLabel: null,
+        topCount: 0
+      });
+    }
+    res.status(500).json({
+      error: 'Failed to fetch vacation frequency distribution',
+      message: error.message
+    });
+  }
+});
+
 // Tours list endpoint (for dropdown options)
 app.get('/api/tours', async (req, res) => {
   try {

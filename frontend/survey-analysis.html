@@ -39,10 +39,11 @@
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
             flex-shrink: 0;
         }
 
@@ -104,19 +105,168 @@
             font-weight: 600;
         }
 
-        .content-placeholder {
+        .chart-container {
             background: white;
             border-radius: 12px;
-            padding: 60px;
+            padding: 30px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .content-placeholder p {
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 8px 0;
+        }
+
+        .chart-subtitle {
+            font-size: 14px;
             color: #666;
-            font-size: 16px;
+            margin: 0 0 25px 0;
+        }
+
+        .chart-title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chart-title-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .chart-loading {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .chart-error {
+            text-align: center;
+            padding: 60px;
+            color: #e74c3c;
+            font-style: normal;
+        }
+
+        .chart-insight {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .chart-insight.warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        /* Heatmap Styles */
+        .heatmap-wrapper {
+            overflow-x: auto;
             margin-bottom: 15px;
-            line-height: 1.6;
+        }
+
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 14px;
+            min-width: 500px;
+        }
+
+        .heatmap-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            border: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .heatmap-table th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background: #f8f9fa !important;
+            text-align: left;
+            min-width: 100px;
+        }
+
+        .heatmap-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            position: relative;
+            font-weight: 600;
+            transition: transform 0.1s;
+        }
+
+        .heatmap-table td:hover {
+            transform: scale(1.05);
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .heatmap-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: white !important;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            min-width: 100px;
+        }
+
+        .heatmap-table tbody tr:hover td:first-child {
+            background: #f8f9fa !important;
+        }
+
+        .heatmap-cell {
+            cursor: help;
+        }
+
+        .heatmap-legend {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Two-column layout for side-by-side charts */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -124,7 +274,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <img src="images/jolly-logo.png" alt="Jolly Logo" class="sidebar-logo">
+            <img src="/images/Jolly-Tur-Logo.jpg" alt="Jolly Tur Logo" class="sidebar-logo">
             <div class="sidebar-header-text">
                 <h1>Jolly SmartTour</h1>
                 <p>Karar Destek Sistemi</p>
@@ -143,10 +293,1024 @@
     <main class="main-content">
         <h1 class="page-title">Anket Analizi</h1>
         
-        <div class="content-placeholder">
-            <p>Anket ve soru formu analizi içeriği burada görüntülenecektir.</p>
-            <p>Bu sayfa anket sonuçları, yanıtlar ve geri bildirim analitikleri içerecektir.</p>
+        <!-- Yaş Gruplarına Göre Müşteri Dağılımı -->
+        <div class="chart-container">
+            <h2 class="chart-title">Yaş Gruplarına Göre Müşteri Dağılımı</h2>
+            <p class="chart-subtitle">Hedef kitle optimizasyonu için yaş aralıklarına göre müşteri dağılımı</p>
+            
+            <div id="ageChartLoading" class="chart-loading">Yükleniyor...</div>
+            <div id="ageChartError" class="chart-error" style="display:none;"></div>
+            <div class="chart-wrapper" id="ageChartWrapper" style="display:none;">
+                <canvas id="ageGroupChart"></canvas>
+            </div>
+            <div id="ageChartInsight" class="chart-insight" style="display:none;"></div>
+        </div>
+
+        <!-- Yaş Grubu × Tur Türü Tercihi (Isı Haritası) -->
+        <div class="chart-container">
+            <h2 class="chart-title">Yaş Grubu × Tur Türü Tercihi (Isı Haritası)</h2>
+            <p class="chart-subtitle">Yaş segmentlerinin tur türlerine göre rezervasyon yoğunluğu</p>
+            
+            <div id="heatmapLoading" class="chart-loading">Yükleniyor...</div>
+            <div id="heatmapError" class="chart-error" style="display:none;"></div>
+            
+            <div id="heatmapContent" style="display:none;">
+                <div class="heatmap-wrapper">
+                    <table class="heatmap-table" id="heatmapTable">
+                        <thead id="heatmapHeader">
+                            <tr>
+                                <th>Yaş Grubu / Tur Türü</th>
+                            </tr>
+                        </thead>
+                        <tbody id="heatmapBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="heatmapLegend" class="heatmap-legend"></div>
+                <div id="heatmapInsight" class="chart-insight" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Yaş Grubu × Kampanya Hassasiyeti -->
+        <div class="chart-container">
+            <h2 class="chart-title">Yaş Grubu × Kampanya Hassasiyeti</h2>
+            <p class="chart-subtitle">Her yaş grubunda kampanyalı/kampanyasız rezervasyon oranı (%)</p>
+            
+            <div id="campaignSensitivityLoading" class="chart-loading">Yükleniyor...</div>
+            <div id="campaignSensitivityError" class="chart-error" style="display:none;"></div>
+            <div class="chart-wrapper" id="campaignSensitivityWrapper" style="display:none;">
+                <canvas id="campaignSensitivityChart"></canvas>
+            </div>
+            <div id="campaignSensitivityInsight" class="chart-insight" style="display:none;"></div>
+        </div>
+
+        <!-- Öncelikli Özellikler and Aktivite Tercihleri (Side by Side) -->
+        <div class="charts-row">
+            <!-- Öncelikli Özellikler (Talep Haritası) -->
+            <div class="chart-container">
+                <h2 class="chart-title">Öncelikli Özellikler (Talep Haritası)</h2>
+                <p class="chart-subtitle">Müşterilerin tur seçerken en çok önem verdiği kriterler (Top 10)</p>
+                
+                <div id="priorityFeaturesLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="priorityFeaturesError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="priorityFeaturesWrapper" style="display:none;">
+                    <canvas id="priorityFeaturesChart"></canvas>
+                </div>
+                <div id="priorityFeaturesInsight" class="chart-insight" style="display:none;"></div>
+            </div>
+
+            <!-- Aktivite Tercihleri -->
+            <div class="chart-container">
+                <h2 class="chart-title">Aktivite Tercihleri</h2>
+                <p class="chart-subtitle">Müşterilerin turda en çok tercih ettiği aktiviteler (Top 8)</p>
+                
+                <div id="activityPreferencesLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="activityPreferencesError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="activityPreferencesWrapper" style="display:none;">
+                    <canvas id="activityPreferencesChart"></canvas>
+                </div>
+                <div id="activityPreferencesInsight" class="chart-insight" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Kampanya Etkisi Skoru Dağılımı and Tatil Sıklığı Dağılımı (Side by Side) -->
+        <div class="charts-row">
+            <!-- Kampanya Etkisi Skoru Dağılımı -->
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Kampanya Etkisi Skoru Dağılımı</h2>
+                    <span id="campaignImpactBadge" class="chart-title-badge" style="display:none;"></span>
+                </div>
+                <p class="chart-subtitle">Müşterilerin kampanya/indirim etkisini algılama segmentleri</p>
+                
+                <div id="campaignImpactLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="campaignImpactError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="campaignImpactWrapper" style="display:none;">
+                    <canvas id="campaignImpactChart"></canvas>
+                </div>
+                <div id="campaignImpactInsight" class="chart-insight" style="display:none;"></div>
+            </div>
+
+            <!-- Tatil Sıklığı Dağılımı -->
+            <div class="chart-container">
+                <h2 class="chart-title">Tatil Sıklığı Dağılımı</h2>
+                <p class="chart-subtitle">Müşterilerin yılda kaç kez tatile çıktığı (Toplam yanıt dağılımı)</p>
+                
+                <div id="tatilSikligiLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="tatilSikligiError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="tatilSikligiWrapper" style="display:none;">
+                    <canvas id="tatilSikligiChart"></canvas>
+                </div>
+                <div id="tatilSikligiInsight" class="chart-insight" style="display:none;"></div>
+            </div>
         </div>
     </main>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        let ageGroupChart = null;
+
+        async function loadAgeDistribution() {
+            const loadingEl = document.getElementById('ageChartLoading');
+            const errorEl = document.getElementById('ageChartError');
+            const wrapperEl = document.getElementById('ageChartWrapper');
+            const insightEl = document.getElementById('ageChartInsight');
+            const canvasEl = document.getElementById('ageGroupChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/anket/age-distribution');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.labels || !data.counts || data.counts.length === 0) {
+                    throw new Error('Veri bulunamadı');
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (ageGroupChart) {
+                    ageGroupChart.destroy();
+                    ageGroupChart = null;
+                }
+
+                // Create bar chart
+                const ctx = canvasEl.getContext('2d');
+                ageGroupChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Müşteri Sayısı',
+                            data: data.counts,
+                            backgroundColor: [
+                                '#3498db',
+                                '#2ecc71',
+                                '#f39c12',
+                                '#e74c3c',
+                                '#9b59b6'
+                            ],
+                            borderColor: [
+                                '#2980b9',
+                                '#27ae60',
+                                '#d68910',
+                                '#c0392b',
+                                '#8e44ad'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.parsed.y;
+                                        const percentage = data.total > 0 
+                                            ? ((value / data.total) * 100).toFixed(1) 
+                                            : '0.0';
+                                        return value + ' müşteri (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Müşteri Sayısı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Yaş Grubu',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Generate insight text
+                let insightHTML = '';
+                const maxIndex = data.counts.indexOf(Math.max(...data.counts));
+                const maxLabel = data.labels[maxIndex];
+                const maxCount = data.counts[maxIndex];
+                
+                insightHTML = `En yoğun yaş grubu: <strong>${maxLabel}</strong> (${maxCount} müşteri). Pazarlama hedeflemesi bu segmente göre optimize edilebilir.`;
+
+                insightEl.classList.remove('warning');
+                insightEl.innerHTML = insightHTML;
+                insightEl.style.display = 'block';
+
+            } catch (error) {
+                console.error('Yaş dağılımı yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Yaş dağılımı verisi alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Age Group × Tour Type Heatmap
+        // -----------------------------
+        function getHeatmapColor(intensity) {
+            // Intensity: 0.0 to 1.0
+            // Green/teal color scale - from light to darker
+            // Light: rgb(230, 255, 250) -> Dark: rgb(0, 150, 136)
+            const r = Math.floor(230 - (intensity * 230));
+            const g = Math.floor(255 - (intensity * 105));
+            const b = Math.floor(250 - (intensity * 114));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function getTextColor(intensity) {
+            // Use white text if intensity is high (above 0.7)
+            return intensity > 0.7 ? '#ffffff' : '#333333';
+        }
+
+        async function loadAgeTourHeatmap() {
+            const loadingEl = document.getElementById('heatmapLoading');
+            const errorEl = document.getElementById('heatmapError');
+            const contentEl = document.getElementById('heatmapContent');
+            const headerEl = document.getElementById('heatmapHeader');
+            const bodyEl = document.getElementById('heatmapBody');
+            const legendEl = document.getElementById('heatmapLegend');
+            const insightEl = document.getElementById('heatmapInsight');
+
+            if (!loadingEl || !errorEl || !contentEl || !headerEl || !bodyEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                contentEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/analytics/age-tour-heatmap');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.ageGroups || !data.tourTypes || !data.matrix) {
+                    throw new Error('Veri bulunamadı');
+                }
+
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+
+                // Build header row
+                let headerHTML = '<tr><th>Yaş Grubu / Tur Türü</th>';
+                data.tourTypes.forEach(tourType => {
+                    headerHTML += `<th>${tourType}</th>`;
+                });
+                headerHTML += '</tr>';
+                headerEl.innerHTML = headerHTML;
+
+                // Build body rows
+                let bodyHTML = '';
+                const maxValue = data.maxValue || 1; // Prevent division by zero
+
+                data.ageGroups.forEach((ageGroup, ageIndex) => {
+                    bodyHTML += `<tr><td>${ageGroup}</td>`;
+                    data.tourTypes.forEach((tourType, tourIndex) => {
+                        const value = data.matrix[ageIndex] && data.matrix[ageIndex][tourIndex] !== undefined
+                            ? data.matrix[ageIndex][tourIndex]
+                            : 0;
+                        const intensity = maxValue > 0 ? value / maxValue : 0;
+                        const bgColor = getHeatmapColor(intensity);
+                        const textColor = getTextColor(intensity);
+                        
+                        bodyHTML += `<td class="heatmap-cell" 
+                            style="background-color: ${bgColor}; color: ${textColor};" 
+                            title="${ageGroup} • ${tourType}: ${value} rezervasyon">${value}</td>`;
+                    });
+                    bodyHTML += '</tr>';
+                });
+                bodyEl.innerHTML = bodyHTML;
+
+                // Update legend
+                legendEl.textContent = `Düşük → Yüksek (0 - ${maxValue})`;
+
+                // Update insight
+                if (data.topCell && data.topCell.ageGroup && data.topCell.tourType) {
+                    insightEl.innerHTML = `En yoğun tercih: <strong>${data.topCell.ageGroup}</strong> yaş grubu • <strong>${data.topCell.tourType}</strong> (${data.topCell.value} rezervasyon). Bu segment için hedefli kampanya ve içerik planlaması yapılabilir.`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Isı haritası yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Veri alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Age Group × Campaign Sensitivity
+        // -----------------------------
+        let campaignSensitivityChart = null;
+
+        async function loadCampaignSensitivity() {
+            const loadingEl = document.getElementById('campaignSensitivityLoading');
+            const errorEl = document.getElementById('campaignSensitivityError');
+            const wrapperEl = document.getElementById('campaignSensitivityWrapper');
+            const insightEl = document.getElementById('campaignSensitivityInsight');
+            const canvasEl = document.getElementById('campaignSensitivityChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/analytics/age-campaign-sensitivity');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.ageGroups || !data.percentages || !data.counts) {
+                    throw new Error('Veri bulunamadı');
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (campaignSensitivityChart) {
+                    campaignSensitivityChart.destroy();
+                    campaignSensitivityChart = null;
+                }
+
+                // Create 100% stacked bar chart
+                const ctx = canvasEl.getContext('2d');
+                campaignSensitivityChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.ageGroups,
+                        datasets: [
+                            {
+                                label: 'Kampanyalı (%)',
+                                data: data.percentages['Kampanyalı'],
+                                backgroundColor: '#2ecc71',
+                                borderColor: '#27ae60',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Kampanyasız (%)',
+                                data: data.percentages['Kampanyasız'],
+                                backgroundColor: '#95a5a6',
+                                borderColor: '#7f8c8d',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return 'Yaş Grubu: ' + context[0].label;
+                                    },
+                                    label: function(context) {
+                                        const datasetLabel = context.dataset.label;
+                                        const percentage = context.parsed.y.toFixed(2);
+                                        const ageIndex = context.dataIndex;
+                                        const count = datasetLabel === 'Kampanyalı (%)'
+                                            ? data.counts['Kampanyalı'][ageIndex]
+                                            : data.counts['Kampanyasız'][ageIndex];
+                                        return datasetLabel.replace(' (%)', '') + ': %' + percentage + ' (' + count + ' rezervasyon)';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Yaş Grubu',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                min: 0,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Yüzde (%)',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text
+                if (data.topSensitive && data.topSensitive.ageGroup) {
+                    insightEl.innerHTML = `En yüksek kampanya hassasiyeti: <strong>${data.topSensitive.ageGroup}</strong> yaş grubu (%${data.topSensitive.kampanyaliPct} kampanyalı). Bu segment için kampanya hedeflemesi artırılabilir.`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Kampanya hassasiyeti yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Kampanya hassasiyeti verisi alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Priority Features (Demand Map)
+        // -----------------------------
+        let priorityFeaturesChart = null;
+
+        async function loadPriorityFeatures() {
+            const loadingEl = document.getElementById('priorityFeaturesLoading');
+            const errorEl = document.getElementById('priorityFeaturesError');
+            const wrapperEl = document.getElementById('priorityFeaturesWrapper');
+            const insightEl = document.getElementById('priorityFeaturesInsight');
+            const canvasEl = document.getElementById('priorityFeaturesChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/anket/top-oncelikli-ozellikler');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.labels || !data.counts || data.labels.length === 0) {
+                    throw new Error('Veri bulunamadı');
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (priorityFeaturesChart) {
+                    priorityFeaturesChart.destroy();
+                    priorityFeaturesChart = null;
+                }
+
+                // Find top feature for insight
+                const maxIndex = data.counts.indexOf(Math.max(...data.counts));
+                const topLabel = data.labels[maxIndex];
+                const topCount = data.counts[maxIndex];
+
+                // Create horizontal bar chart
+                const ctx = canvasEl.getContext('2d');
+                priorityFeaturesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Yanıt Sayısı',
+                            data: data.counts,
+                            backgroundColor: '#3498db',
+                            borderColor: '#2980b9',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.dataset.label || '';
+                                        const value = context.parsed.x;
+                                        const featureName = context.label;
+                                        return featureName + ': ' + value + ' yanıt';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Yanıt Sayısı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Öncelikli Özellik',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text
+                insightEl.innerHTML = `En çok öne çıkan kriter: <strong>${topLabel}</strong> (${topCount} yanıt). Bu kriteri tur paketleme ve pazarlama mesajlarında vurgulamak önerilir.`;
+                insightEl.style.display = 'block';
+
+            } catch (error) {
+                console.error('Öncelikli özellikler yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Veri alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Activity Preferences
+        // -----------------------------
+        let activityPreferencesChart = null;
+
+        async function loadActivityPreferences() {
+            const loadingEl = document.getElementById('activityPreferencesLoading');
+            const errorEl = document.getElementById('activityPreferencesError');
+            const wrapperEl = document.getElementById('activityPreferencesWrapper');
+            const insightEl = document.getElementById('activityPreferencesInsight');
+            const canvasEl = document.getElementById('activityPreferencesChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/anket/aktivite-tercihleri');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.labels || !data.counts || data.labels.length === 0) {
+                    loadingEl.style.display = 'none';
+                    errorEl.textContent = 'Yeterli veri bulunamadı';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (activityPreferencesChart) {
+                    activityPreferencesChart.destroy();
+                    activityPreferencesChart = null;
+                }
+
+                // Create horizontal bar chart
+                const ctx = canvasEl.getContext('2d');
+                activityPreferencesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Yanıt Sayısı',
+                            data: data.counts,
+                            backgroundColor: '#9b59b6',
+                            borderColor: '#8e44ad',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed.x;
+                                        return label + ': ' + value + ' yanıt';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Yanıt Sayısı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Aktivite',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text
+                if (data.topActivity && data.topActivity.name) {
+                    insightEl.innerHTML = `En çok tercih edilen aktivite: <strong>${data.topActivity.name}</strong> (${data.topActivity.count} yanıt). Tur paketlerinde bu aktivite vurgulanabilir.`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Aktivite tercihleri yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Veri alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Campaign Impact Score Distribution
+        // -----------------------------
+        let campaignImpactChart = null;
+
+        async function loadCampaignImpactDistribution() {
+            const loadingEl = document.getElementById('campaignImpactLoading');
+            const errorEl = document.getElementById('campaignImpactError');
+            const wrapperEl = document.getElementById('campaignImpactWrapper');
+            const insightEl = document.getElementById('campaignImpactInsight');
+            const badgeEl = document.getElementById('campaignImpactBadge');
+            const canvasEl = document.getElementById('campaignImpactChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+                if (badgeEl) badgeEl.style.display = 'none';
+
+                const response = await fetch('/api/anket/kampanya-etkisi-dagilimi');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.segments || data.segments.length === 0 || data.total === 0) {
+                    loadingEl.style.display = 'none';
+                    errorEl.textContent = 'Veri bulunamadı';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (campaignImpactChart) {
+                    campaignImpactChart.destroy();
+                    campaignImpactChart = null;
+                }
+
+                // Update badge with average score
+                if (badgeEl && data.avgScore) {
+                    badgeEl.textContent = 'Ort. Skor: ' + data.avgScore.toFixed(1);
+                    badgeEl.style.display = 'inline-block';
+                }
+
+                // Prepare data for normal bar chart (3 bars)
+                const labels = data.segments.map(s => s.segment);
+                const counts = data.segments.map(s => s.count);
+                const colors = ['#e74c3c', '#f39c12', '#2ecc71']; // Red, Orange, Green
+
+                // Create normal bar chart
+                const ctx = canvasEl.getContext('2d');
+                campaignImpactChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Yanıt Sayısı',
+                            data: counts,
+                            backgroundColor: colors,
+                            borderColor: colors.map(c => c.replace('rgb', 'rgba').replace(')', ',0.8)')),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Yanıt Sayısı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Segment',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const count = context.parsed.y;
+                                        const total = data.total;
+                                        const percent = total > 0 ? ((count / total) * 100).toFixed(2) : '0.00';
+                                        return context.label + ': ' + count + ' yanıt (%' + percent + ')';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text - find segment with highest count
+                const maxSegment = data.segments.reduce((max, seg) => seg.count > max.count ? seg : max, data.segments[0]);
+                if (maxSegment && data.total > 0) {
+                    const percent = ((maxSegment.count / data.total) * 100).toFixed(2);
+                    insightEl.innerHTML = `Yanıtların en büyük kısmı <strong>${maxSegment.segment}</strong> segmentinde (%${percent}). Kampanya iletişimi bu segmente göre optimize edilebilir.`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Kampanya etkisi dağılımı yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Veri alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // Load age distribution, heatmap, campaign sensitivity, priority features, activity preferences, and campaign impact on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAgeDistribution();
+            loadAgeTourHeatmap();
+            loadCampaignSensitivity();
+            loadPriorityFeatures();
+            loadActivityPreferences();
+            loadCampaignImpactDistribution();
+            loadTatilSikligiDistribution();
+        });
+
+        // -----------------------------
+        // Vacation Frequency Distribution
+        // -----------------------------
+        let tatilSikligiChart = null;
+
+        async function loadTatilSikligiDistribution() {
+            const loadingEl = document.getElementById('tatilSikligiLoading');
+            const errorEl = document.getElementById('tatilSikligiError');
+            const wrapperEl = document.getElementById('tatilSikligiWrapper');
+            const insightEl = document.getElementById('tatilSikligiInsight');
+            const canvasEl = document.getElementById('tatilSikligiChart');
+
+            if (!loadingEl || !errorEl || !wrapperEl || !canvasEl) return;
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                wrapperEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch('/api/anket/tatil-sikligi-dagilimi');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.labels || !data.counts || data.counts.length === 0) {
+                    loadingEl.style.display = 'none';
+                    errorEl.textContent = 'Veri bulunamadı';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                loadingEl.style.display = 'none';
+                wrapperEl.style.display = 'block';
+
+                // Destroy existing chart if it exists
+                if (tatilSikligiChart) {
+                    tatilSikligiChart.destroy();
+                    tatilSikligiChart = null;
+                }
+
+                // Create bar chart
+                const ctx = canvasEl.getContext('2d');
+                tatilSikligiChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Yanıt Sayısı',
+                            data: data.counts,
+                            backgroundColor: '#3498db',
+                            borderColor: '#2980b9',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y + ' yanıt';
+                                    }
+                                }
+                            },
+                            afterDatasetsDraw: (chart) => {
+                                const ctx = chart.ctx;
+                                chart.data.datasets.forEach((dataset, i) => {
+                                    const meta = chart.getDatasetMeta(i);
+                                    meta.data.forEach((element, index) => {
+                                        const value = dataset.data[index];
+                                        if (value > 0) {
+                                            ctx.save();
+                                            ctx.fillStyle = '#333';
+                                            ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+                                            ctx.textAlign = 'center';
+                                            ctx.textBaseline = 'bottom';
+                                            ctx.fillText(value, element.x, element.y - 5);
+                                            ctx.restore();
+                                        }
+                                    });
+                                });
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Yanıt Sayısı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Tatil Sıklığı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text
+                if (data.topLabel && data.topCount > 0) {
+                    insightEl.innerHTML = `En sık görülen tatil sıklığı: <strong>${data.topLabel}</strong> (${data.topCount} yanıt).`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Tatil sıklığı dağılımı yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.textContent = 'Veri alınamadı.';
+                errorEl.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>

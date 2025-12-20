@@ -39,10 +39,11 @@
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
             flex-shrink: 0;
         }
 
@@ -104,19 +105,574 @@
             font-weight: 600;
         }
 
-        .content-placeholder {
+        /* KPI Cards */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
             background: white;
             border-radius: 12px;
-            padding: 60px;
+            padding: 25px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .kpi-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .kpi-card-icon {
+            font-size: 24px;
+        }
+
+        .kpi-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #E30613;
+            margin-bottom: 8px;
+        }
+
+        .kpi-subtext {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .kpi-loading {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .kpi-error {
+            color: #e74c3c;
+            font-size: 14px;
+        }
+
+        /* Comparison Chart Section */
+        .comparison-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .comparison-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+
+        .comparison-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-controls label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .comparison-controls select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .comparison-controls select:hover {
+            border-color: #E30613;
+        }
+
+        .comparison-controls select:focus {
+            outline: none;
+            border-color: #E30613;
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .chart-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-style: italic;
+        }
+
+        .chart-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #e74c3c;
+            font-size: 14px;
+        }
+
+        /* ROI Ranking Section */
+        .roi-ranking-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .roi-ranking-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 25px 0;
+        }
+
+        .roi-insight {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2ECC71;
+            font-size: 14px;
+            color: #333;
+            display: none;
+        }
+
+        .roi-insight.warning {
+            border-left-color: #F39C12;
+            background: #fffbf0;
+        }
+
+        .roi-insight.danger {
+            border-left-color: #E74C3C;
+            background: #fff5f5;
+        }
+
+        .roi-insight-icon {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* What-If Senaryo Analizi Section */
+        .whatif-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .whatif-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 25px 0;
+        }
+
+        .whatif-controls {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+            align-items: end;
+        }
+
+        .whatif-control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .whatif-control-group label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .whatif-control-group select,
+        .whatif-control-group input[type="range"] {
+            width: 100%;
+        }
+
+        .whatif-control-group select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .whatif-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .whatif-slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .whatif-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #E30613;
+            cursor: pointer;
+        }
+
+        .whatif-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #E30613;
+            cursor: pointer;
+            border: none;
+        }
+
+        .whatif-slider-value {
+            min-width: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #E30613;
             text-align: center;
         }
 
-        .content-placeholder p {
+        .whatif-button {
+            padding: 10px 20px;
+            background: #E30613;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            height: fit-content;
+        }
+
+        .whatif-button:hover {
+            background: #C40511;
+        }
+
+        .whatif-button:active {
+            background: #A3040E;
+        }
+
+        .whatif-warning {
+            padding: 12px 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .whatif-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .whatif-result-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .whatif-result-title {
+            font-size: 14px;
+            font-weight: 600;
             color: #666;
-            font-size: 16px;
             margin-bottom: 15px;
-            line-height: 1.6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .whatif-result-item {
+            margin-bottom: 12px;
+        }
+
+        .whatif-result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .whatif-result-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .whatif-result-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .whatif-comparison {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .whatif-comparison.positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .whatif-comparison.negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .whatif-comparison.neutral {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .whatif-loading, .whatif-error {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .whatif-error {
+            color: #e74c3c;
+            font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+            .whatif-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .whatif-results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Campaign Impact Matrix Section */
+        .impact-matrix-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .impact-matrix-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 25px 0;
+        }
+
+        .impact-matrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .impact-matrix-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .impact-matrix-controls label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .impact-matrix-controls select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .impact-matrix-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .impact-matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 600px;
+        }
+
+        .impact-matrix-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            border: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .impact-matrix-table th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background: #f8f9fa !important;
+            text-align: left;
+        }
+
+        .impact-matrix-table td {
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            position: relative;
+        }
+
+        .impact-matrix-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: white !important;
+            text-align: left;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .impact-matrix-table tbody tr:hover td:first-child {
+            background: #f8f9fa !important;
+        }
+
+        .impact-matrix-table tbody tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .impact-matrix-table tbody tr:hover td:first-child {
+            background: #f8f9fa;
+        }
+
+        .matrix-cell {
+            cursor: help;
+            font-weight: 600;
+        }
+
+        .matrix-cell.high {
+            background: #d4edda !important;
+            color: #155724;
+        }
+
+        .matrix-cell.medium {
+            background: #fff3cd !important;
+            color: #856404;
+        }
+
+        .matrix-cell.low {
+            background: #f8d7da !important;
+            color: #721c24;
+        }
+
+        .matrix-cell.zero {
+            background: #e9ecef !important;
+            color: #6c757d;
+        }
+
+        .impact-matrix-insight {
+            padding: 15px;
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .impact-matrix-loading, .impact-matrix-error {
+            padding: 40px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .impact-matrix-error {
+            color: #e74c3c;
+            font-style: normal;
+        }
+
+
+        @media (max-width: 1200px) {
+            .kpi-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-section {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -124,7 +680,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <img src="images/jolly-logo.png" alt="Jolly Logo" class="sidebar-logo">
+            <img src="/images/Jolly-Tur-Logo.jpg" alt="Jolly Tur Logo" class="sidebar-logo">
             <div class="sidebar-header-text">
                 <h1>Jolly SmartTour</h1>
                 <p>Karar Destek Sistemi</p>
@@ -143,10 +699,1057 @@
     <main class="main-content">
         <h1 class="page-title">Kampanya Etki Analizi</h1>
         
-        <div class="content-placeholder">
-            <p>Kampanya etki analizi içeriği burada görüntülenecektir.</p>
-            <p>Bu sayfa kampanya metrikleri, ROI ve etkinlik analitikleri içerecektir.</p>
+        <!-- KPI Cards -->
+        <div class="kpi-section" id="campaignKpiSection">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-card-icon">📊</span>
+                    <h3>Kampanyalı Rezervasyon Oranı (%)</h3>
+                </div>
+                <div class="kpi-value" id="campaignReservationRate">
+                    <span class="kpi-loading">Yükleniyor...</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-card-icon">💰</span>
+                    <h3>Kampanyalı Rezervasyonlardan Toplam Kâr</h3>
+                </div>
+                <div class="kpi-value" id="campaignTotalProfit">
+                    <span class="kpi-loading">Yükleniyor...</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-card-icon">⚠️</span>
+                    <h3>Kampanya Olmasına Rağmen Düşük Doluluklu Tur Sayısı</h3>
+                </div>
+                <div class="kpi-value" id="lowOccupancyCampaignTourCount">
+                    <span class="kpi-loading">Yükleniyor...</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Kampanyalı vs Kampanyasız Karşılaştırma -->
+        <section class="comparison-section" aria-label="Kampanyalı vs Kampanyasız Karşılaştırma">
+            <div class="comparison-header">
+                <h2 class="comparison-title">Kampanyalı vs Kampanyasız Karşılaştırma</h2>
+                <div class="comparison-controls">
+                    <label for="comparisonMetric">Metrik Seç:</label>
+                    <select id="comparisonMetric">
+                        <option value="rezervasyon_sayisi">Rezervasyon Sayısı</option>
+                        <option value="ortalama_kar">Ortalama Kâr</option>
+                        <option value="toplam_kar">Toplam Kâr</option>
+                        <option value="ortalama_doluluk_orani">Ortalama Doluluk Oranı</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="comparisonChart"></canvas>
+                <div id="comparisonLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="comparisonError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+            </div>
+        </section>
+
+        <!-- Kampanya Bazlı ROI Sıralaması -->
+        <section class="roi-ranking-section" aria-label="Kampanya Bazlı ROI Sıralaması">
+            <h2 class="roi-ranking-title">Kampanya Bazlı ROI Sıralaması</h2>
+            
+            <div class="chart-wrapper" style="height: 500px;">
+                <canvas id="roiRankingChart"></canvas>
+                <div id="roiRankingLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="roiRankingError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+            </div>
+
+            <div id="roiInsight" class="roi-insight"></div>
+        </section>
+
+        <!-- Campaign Impact Matrix (Campaign vs Tour Type) -->
+        <section class="impact-matrix-section" aria-label="Campaign Impact Matrix">
+            <div class="impact-matrix-header">
+                <h2 class="impact-matrix-title">Campaign Impact Matrix (Campaign vs Tour Type)</h2>
+                <div class="impact-matrix-controls">
+                    <label for="matrixMetricSelect">Metrik Seç:</label>
+                    <select id="matrixMetricSelect">
+                        <option value="avg_profit">Ortalama Kâr</option>
+                        <option value="total_profit">Toplam Kâr</option>
+                        <option value="reservation_count">Rezervasyon Sayısı</option>
+                        <option value="avg_occupancy">Ortalama Doluluk Oranı</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="impact-matrix-wrapper">
+                <table class="impact-matrix-table" id="impactMatrixTable">
+                    <thead id="impactMatrixHeader">
+                        <tr>
+                            <th>Kampanya / Tur Türü</th>
+                        </tr>
+                    </thead>
+                    <tbody id="impactMatrixBody">
+                        <tr>
+                            <td colspan="100" class="impact-matrix-loading">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="impactMatrixError" class="impact-matrix-error" style="display:none;"></div>
+            <div id="impactMatrixInsight" class="impact-matrix-insight" style="display:none;"></div>
+        </section>
+
+        <!-- What-If Senaryo Analizi: İndirim Oranı -->
+        <section class="whatif-section" aria-label="What-If Senaryo Analizi: İndirim Oranı">
+            <h2 class="whatif-title">What-If Senaryo Analizi: İndirim Oranı</h2>
+            
+            <div class="whatif-warning">
+                ⚠️ Bu bir simülasyondur, veritabanına kayıt yapılmaz.
+            </div>
+
+            <div class="whatif-controls">
+                <div class="whatif-control-group">
+                    <label for="whatifCampaignSelect">Kampanya Seç</label>
+                    <select id="whatifCampaignSelect">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                </div>
+                <div class="whatif-control-group">
+                    <label for="whatifDiscountSlider">İndirim Oranı</label>
+                    <div class="whatif-slider-container">
+                        <input type="range" id="whatifDiscountSlider" class="whatif-slider" 
+                               min="0" max="50" value="25" step="1">
+                        <span class="whatif-slider-value" id="whatifDiscountValue">25%</span>
+                    </div>
+                </div>
+                <div class="whatif-control-group">
+                    <button id="whatifCalculateBtn" class="whatif-button">Senaryoyu Hesapla</button>
+                </div>
+            </div>
+
+            <div id="whatifResults" style="display:none;">
+                <div class="whatif-results">
+                    <div class="whatif-result-card">
+                        <div class="whatif-result-title">Mevcut Durum</div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Mevcut İndirim Oranı</div>
+                            <div class="whatif-result-value" id="whatifCurrentDiscount">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Toplam Kâr</div>
+                            <div class="whatif-result-value" id="whatifCurrentProfit">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Ortalama Kâr / Rezervasyon</div>
+                            <div class="whatif-result-value" id="whatifCurrentAvgProfit">-</div>
+                        </div>
+                    </div>
+                    <div class="whatif-result-card">
+                        <div class="whatif-result-title">What-If Senaryosu</div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Senaryo İndirim Oranı</div>
+                            <div class="whatif-result-value" id="whatifSimulatedDiscount">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Tahmini Toplam Kâr</div>
+                            <div class="whatif-result-value" id="whatifSimulatedProfit">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Tahmini Ortalama Kâr / Rezervasyon</div>
+                            <div class="whatif-result-value" id="whatifSimulatedAvgProfit">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="whatifComparison" class="whatif-comparison"></div>
+            </div>
+
+            <div id="whatifLoading" class="whatif-loading" style="display:none;">Hesaplanıyor...</div>
+            <div id="whatifError" class="whatif-error" style="display:none;"></div>
+        </section>
+
+        <!-- What-If Senaryo Analizi: Kampanya Kaldırılsaydı? -->
+        <section class="whatif-section" aria-label="What-If Senaryo Analizi: Kampanya Kaldırılsaydı?">
+            <h2 class="whatif-title">What-If Senaryo Analizi: Kampanya Kaldırılsaydı?</h2>
+            
+            <div class="whatif-warning">
+                ⚠️ Bu bir simülasyondur, gerçek veriler değiştirilmemiştir.
+            </div>
+
+            <div class="whatif-controls">
+                <div class="whatif-control-group">
+                    <label for="whatifRemovalCampaignSelect">Kampanya Seç</label>
+                    <select id="whatifRemovalCampaignSelect">
+                        <option value="">Seçiniz...</option>
+                    </select>
+                </div>
+                <div class="whatif-control-group">
+                    <button id="whatifRemovalCalculateBtn" class="whatif-button">Senaryoyu Hesapla</button>
+                </div>
+            </div>
+
+            <div id="whatifRemovalResults" style="display:none;">
+                <div class="whatif-results">
+                    <div class="whatif-result-card">
+                        <div class="whatif-result-title">Mevcut Durum (Kampanyalı)</div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Toplam Kâr</div>
+                            <div class="whatif-result-value" id="whatifRemovalCurrentProfit">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Ortalama Kâr / Rezervasyon</div>
+                            <div class="whatif-result-value" id="whatifRemovalCurrentAvgProfit">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Rezervasyon Sayısı</div>
+                            <div class="whatif-result-value" id="whatifRemovalReservationCount">-</div>
+                        </div>
+                    </div>
+                    <div class="whatif-result-card">
+                        <div class="whatif-result-title">What-If (Kampanya Olmasaydı)</div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Tahmini Toplam Kâr</div>
+                            <div class="whatif-result-value" id="whatifRemovalSimulatedProfit">-</div>
+                        </div>
+                        <div class="whatif-result-item">
+                            <div class="whatif-result-label">Tahmini Ortalama Kâr / Rezervasyon</div>
+                            <div class="whatif-result-value" id="whatifRemovalSimulatedAvgProfit">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="whatifRemovalComparison" class="whatif-comparison"></div>
+                <div id="whatifRemovalInsight" class="whatif-comparison" style="margin-top: 15px;"></div>
+            </div>
+
+            <div id="whatifRemovalLoading" class="whatif-loading" style="display:none;">Hesaplanıyor...</div>
+            <div id="whatifRemovalError" class="whatif-error" style="display:none;"></div>
+        </section>
     </main>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <script>
+        // Fetch and display Campaign KPI data
+        async function loadCampaignKPIs() {
+            try {
+                const response = await fetch('/api/campaign/kpis');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                // Update Campaign Reservation Rate (%)
+                const rateEl = document.getElementById('campaignReservationRate');
+                if (rateEl) {
+                    rateEl.textContent = parseFloat(data.campaignReservationRate).toLocaleString('tr-TR', {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1
+                    }) + '%';
+                }
+
+                // Update Campaign Total Profit (₺)
+                const profitEl = document.getElementById('campaignTotalProfit');
+                if (profitEl) {
+                    profitEl.textContent = parseFloat(data.campaignTotalProfit).toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                }
+
+                // Update Low Occupancy Campaign Tour Count
+                const countEl = document.getElementById('lowOccupancyCampaignTourCount');
+                if (countEl) {
+                    countEl.textContent = data.lowOccupancyCampaignTourCount.toLocaleString('tr-TR');
+                }
+            } catch (error) {
+                console.error('Kampanya KPI verisi yüklenirken hata:', error);
+                
+                // Show error messages
+                const rateEl = document.getElementById('campaignReservationRate');
+                const profitEl = document.getElementById('campaignTotalProfit');
+                const countEl = document.getElementById('lowOccupancyCampaignTourCount');
+                
+                if (rateEl) rateEl.innerHTML = '<span class="kpi-error">Hata</span>';
+                if (profitEl) profitEl.innerHTML = '<span class="kpi-error">Hata</span>';
+                if (countEl) countEl.innerHTML = '<span class="kpi-error">Hata</span>';
+            }
+        }
+
+        // -----------------------------
+        // Kampanyalı vs Kampanyasız Karşılaştırma Chart
+        // -----------------------------
+        let comparisonChart = null;
+
+        // Register datalabels plugin if available
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+
+        // Get metric label in Turkish
+        function getMetricLabel(metric) {
+            const labels = {
+                'rezervasyon_sayisi': 'Rezervasyon Sayısı',
+                'ortalama_kar': 'Ortalama Kâr (₺)',
+                'toplam_kar': 'Toplam Kâr (₺)',
+                'ortalama_doluluk_orani': 'Ortalama Doluluk Oranı (%)'
+            };
+            return labels[metric] || metric;
+        }
+
+        // Format value based on metric
+        function formatValue(value, metric) {
+            if (metric === 'ortalama_kar' || metric === 'toplam_kar') {
+                return new Intl.NumberFormat('tr-TR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(value);
+            } else if (metric === 'ortalama_doluluk_orani') {
+                return new Intl.NumberFormat('tr-TR', {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1
+                }).format(value);
+            } else {
+                return new Intl.NumberFormat('tr-TR').format(value);
+            }
+        }
+
+        // Load comparison chart
+        async function loadComparisonChart(metric = 'rezervasyon_sayisi') {
+            const canvas = document.getElementById('comparisonChart');
+            const loadingEl = document.getElementById('comparisonLoading');
+            const errorEl = document.getElementById('comparisonError');
+            
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+
+                const response = await fetch(`/api/kampanya-karsilastirma?metric=${metric}`);
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                loadingEl.style.display = 'none';
+
+                // Destroy existing chart if it exists
+                if (comparisonChart) {
+                    comparisonChart.destroy();
+                }
+
+                // Create grouped bar chart
+                comparisonChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Kampanyalı', 'Kampanyasız'],
+                        datasets: [{
+                            label: getMetricLabel(metric),
+                            data: [data.kampanyali, data.kampanyasiz],
+                            backgroundColor: [
+                                '#43A047', // Green for Kampanyalı
+                                '#FF9800'  // Orange for Kampanyasız
+                            ],
+                            borderColor: [
+                                '#2E7D32',
+                                '#F57C00'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.parsed.y;
+                                        return `${getMetricLabel(metric)}: ${formatValue(value, metric)}${metric === 'ortalama_doluluk_orani' ? '%' : metric.includes('kar') ? ' ₺' : ''}`;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                formatter: function(value) {
+                                    return formatValue(value, metric) + (metric === 'ortalama_doluluk_orani' ? '%' : metric.includes('kar') ? ' ₺' : '');
+                                },
+                                font: {
+                                    weight: 'bold',
+                                    size: 13
+                                },
+                                color: '#333'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Rezervasyon Türü',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: getMetricLabel(metric),
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatValue(value, metric);
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.06)'
+                                }
+                            }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Karşılaştırma grafiği yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+                if (comparisonChart) {
+                    comparisonChart.destroy();
+                    comparisonChart = null;
+                }
+            }
+        }
+
+        // -----------------------------
+        // Kampanya ROI Ranking Chart
+        // -----------------------------
+        let roiRankingChart = null;
+
+        // Get color based on ROI value
+        // Green: ROI > 20, Yellow: 0-20, Red: ROI < 0
+        function getROIColor(roi) {
+            if (roi < 0) {
+                return '#E53935'; // Red for negative ROI
+            } else if (roi >= 0 && roi <= 20) {
+                return '#FFC107'; // Yellow for 0-20%
+            } else {
+                return '#43A047'; // Green for ROI > 0 (specifically > 20%)
+            }
+        }
+
+        // Load ROI Ranking chart
+        async function loadROIRankingChart() {
+            const canvas = document.getElementById('roiRankingChart');
+            const loadingEl = document.getElementById('roiRankingLoading');
+            const errorEl = document.getElementById('roiRankingError');
+            const insightEl = document.getElementById('roiInsight');
+            
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+
+                const response = await fetch('/api/campaign-roi-ranking');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                loadingEl.style.display = 'none';
+
+                if (!data.campaigns || data.campaigns.length === 0) {
+                    errorEl.textContent = 'Kampanya verisi bulunamadı.';
+                    errorEl.style.display = 'block';
+                    if (insightEl) insightEl.style.display = 'none';
+                    return;
+                }
+
+                // Destroy existing chart if it exists
+                if (roiRankingChart) {
+                    roiRankingChart.destroy();
+                }
+
+                const campaigns = data.campaigns;
+                const labels = campaigns.map(c => c.kampanyaAdi);
+                const roiValues = campaigns.map(c => c.roi);
+                const colors = roiValues.map(roi => getROIColor(roi));
+
+                // Create horizontal bar chart
+                roiRankingChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'ROI (%)',
+                            data: roiValues,
+                            backgroundColor: colors,
+                            borderColor: colors.map(c => {
+                                // Darken border slightly
+                                if (c === '#43A047') return '#2E7D32';
+                                if (c === '#FFC107') return '#F57C00';
+                                return '#C62828';
+                            }),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Horizontal bar chart
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        return context[0].label;
+                                    },
+                                    label: function(context) {
+                                        const campaign = campaigns[context.dataIndex];
+                                        const roi = context.parsed.x;
+                                        return [
+                                            `ROI: ${roi.toFixed(2)}%`,
+                                            `Toplam Kâr: ${campaign.toplamKar.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺`,
+                                            `Toplam İndirim Tutarı: ${campaign.toplamIndirimTutari.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺`,
+                                            `Rezervasyon Sayısı: ${campaign.rezervasyonSayisi.toLocaleString('tr-TR')}`
+                                        ];
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'right',
+                                formatter: function(value) {
+                                    return value.toFixed(2) + '%';
+                                },
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                },
+                                color: '#333'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'ROI (%)',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(0) + '%';
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.06)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Kampanya Adı',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update insight text
+                if (insightEl && campaigns.length > 0) {
+                    const topCampaign = campaigns[0];
+                    const negativeROICount = campaigns.filter(c => c.roi < 0).length;
+                    
+                    let insightHTML = '';
+                    
+                    if (topCampaign.roi > 0) {
+                        insightHTML = `<span class="roi-insight-icon">🏆</span>En yüksek ROI'ye sahip kampanya: <strong>${topCampaign.kampanyaAdi}</strong> (${topCampaign.roi.toFixed(2)}%).`;
+                    }
+                    
+                    if (negativeROICount > 0) {
+                        insightEl.className = 'roi-insight danger';
+                        insightHTML += ` <span class="roi-insight-icon">⚠️</span><strong>Uyarı:</strong> ${negativeROICount} kampanya negatif ROI göstermektedir.`;
+                    } else if (topCampaign.roi > 0) {
+                        insightEl.className = 'roi-insight';
+                    }
+                    
+                    if (insightHTML) {
+                        insightEl.innerHTML = insightHTML;
+                        insightEl.style.display = 'block';
+                    } else {
+                        insightEl.style.display = 'none';
+                    }
+                }
+
+            } catch (error) {
+                console.error('ROI sıralaması grafiği yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+                if (insightEl) insightEl.style.display = 'none';
+                if (roiRankingChart) {
+                    roiRankingChart.destroy();
+                    roiRankingChart = null;
+                }
+            }
+        }
+
+        // Load KPI data when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCampaignKPIs();
+            
+            // Load comparison chart with default metric
+            loadComparisonChart('rezervasyon_sayisi');
+            
+            // Add event listener for metric dropdown
+            const metricSelect = document.getElementById('comparisonMetric');
+            if (metricSelect) {
+                metricSelect.addEventListener('change', function() {
+                    loadComparisonChart(this.value);
+                });
+            }
+
+            // Load ROI ranking chart
+            loadROIRankingChart();
+
+            // Load what-if scenario functionality
+            loadWhatIfScenario();
+            
+            // Load what-if removal scenario functionality
+            loadWhatIfRemovalScenario();
+
+            // Load impact matrix
+            loadImpactMatrix('avg_profit');
+            
+            // Add event listener for metric dropdown
+            const matrixMetricSelect = document.getElementById('matrixMetricSelect');
+            if (matrixMetricSelect) {
+                matrixMetricSelect.addEventListener('change', function() {
+                    loadImpactMatrix(this.value);
+                });
+            }
+        });
+
+        // -----------------------------
+        // What-If Senaryo Analizi: İndirim Oranı
+        // -----------------------------
+        async function loadWhatIfScenario() {
+            // Load campaigns into dropdown
+            try {
+                const response = await fetch('/api/campaigns');
+                if (response.ok) {
+                    const data = await response.json();
+                    const select = document.getElementById('whatifCampaignSelect');
+                    if (select && data.campaigns) {
+                        data.campaigns.forEach(campaign => {
+                            const option = document.createElement('option');
+                            option.value = campaign.kampanyaId;
+                            option.textContent = campaign.kampanyaAdi;
+                            select.appendChild(option);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Kampanyalar yüklenirken hata:', error);
+            }
+
+            // Update slider value display
+            const slider = document.getElementById('whatifDiscountSlider');
+            const sliderValue = document.getElementById('whatifDiscountValue');
+            if (slider && sliderValue) {
+                slider.addEventListener('input', function() {
+                    sliderValue.textContent = this.value + '%';
+                });
+            }
+
+            // Calculate button click handler
+            const calculateBtn = document.getElementById('whatifCalculateBtn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateWhatIfScenario);
+            }
+        }
+
+        async function calculateWhatIfScenario() {
+            const campaignSelect = document.getElementById('whatifCampaignSelect');
+            const slider = document.getElementById('whatifDiscountSlider');
+            const resultsDiv = document.getElementById('whatifResults');
+            const loadingDiv = document.getElementById('whatifLoading');
+            const errorDiv = document.getElementById('whatifError');
+
+            if (!campaignSelect || !slider) return;
+
+            const campaignId = campaignSelect.value;
+            const simulatedDiscount = parseFloat(slider.value);
+
+            if (!campaignId) {
+                alert('Lütfen bir kampanya seçin.');
+                return;
+            }
+
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                resultsDiv.style.display = 'none';
+
+                const response = await fetch(
+                    `/api/campaign-whatif-discount?campaign_id=${campaignId}&simulated_discount=${simulatedDiscount}`
+                );
+                
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                loadingDiv.style.display = 'none';
+
+                // Display current situation
+                document.getElementById('whatifCurrentDiscount').textContent = 
+                    data.campaign.mevcutIndirimOrani.toFixed(1) + '%';
+                document.getElementById('whatifCurrentProfit').textContent = 
+                    data.original.toplamKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                document.getElementById('whatifCurrentAvgProfit').textContent = 
+                    data.original.ortalamaKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+
+                // Display simulated scenario
+                document.getElementById('whatifSimulatedDiscount').textContent = 
+                    data.simulated.indirimOrani.toFixed(1) + '%';
+                document.getElementById('whatifSimulatedProfit').textContent = 
+                    data.simulated.toplamKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                document.getElementById('whatifSimulatedAvgProfit').textContent = 
+                    data.simulated.ortalamaKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+
+                // Display comparison
+                const comparisonDiv = document.getElementById('whatifComparison');
+                const profitDiff = data.comparison.profitDifference;
+                const diffAbs = Math.abs(profitDiff);
+                
+                let comparisonText = '';
+                let comparisonClass = 'neutral';
+                
+                if (profitDiff > 0.1) {
+                    comparisonText = `Bu senaryoda toplam kâr %${diffAbs.toFixed(2)} artar.`;
+                    comparisonClass = 'positive';
+                } else if (profitDiff < -0.1) {
+                    comparisonText = `Bu senaryoda toplam kâr %${diffAbs.toFixed(2)} azalır.`;
+                    comparisonClass = 'negative';
+                } else {
+                    comparisonText = `Bu senaryoda toplam kâr neredeyse aynı kalır.`;
+                    comparisonClass = 'neutral';
+                }
+
+                comparisonDiv.textContent = comparisonText;
+                comparisonDiv.className = 'whatif-comparison ' + comparisonClass;
+
+                resultsDiv.style.display = 'block';
+
+            } catch (error) {
+                console.error('What-if senaryosu hesaplanırken hata:', error);
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = 'Hesaplama sırasında bir hata oluştu.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // What-If Senaryo Analizi: Kampanya Kaldırılsaydı?
+        // -----------------------------
+        async function loadWhatIfRemovalScenario() {
+            // Load campaigns into dropdown (reuse the same campaigns endpoint)
+            try {
+                const response = await fetch('/api/campaigns');
+                if (response.ok) {
+                    const data = await response.json();
+                    const select = document.getElementById('whatifRemovalCampaignSelect');
+                    if (select && data.campaigns) {
+                        data.campaigns.forEach(campaign => {
+                            const option = document.createElement('option');
+                            option.value = campaign.kampanyaId;
+                            option.textContent = campaign.kampanyaAdi;
+                            select.appendChild(option);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Kampanyalar yüklenirken hata:', error);
+            }
+
+            // Calculate button click handler
+            const calculateBtn = document.getElementById('whatifRemovalCalculateBtn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateWhatIfRemovalScenario);
+            }
+        }
+
+        async function calculateWhatIfRemovalScenario() {
+            const campaignSelect = document.getElementById('whatifRemovalCampaignSelect');
+            const resultsDiv = document.getElementById('whatifRemovalResults');
+            const loadingDiv = document.getElementById('whatifRemovalLoading');
+            const errorDiv = document.getElementById('whatifRemovalError');
+
+            if (!campaignSelect) return;
+
+            const campaignId = campaignSelect.value;
+
+            if (!campaignId) {
+                alert('Lütfen bir kampanya seçin.');
+                return;
+            }
+
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                resultsDiv.style.display = 'none';
+
+                const response = await fetch(
+                    `/api/campaign-whatif-removal?campaign_id=${campaignId}`
+                );
+                
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                loadingDiv.style.display = 'none';
+
+                // Display current situation
+                document.getElementById('whatifRemovalCurrentProfit').textContent = 
+                    data.current.toplamKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                document.getElementById('whatifRemovalCurrentAvgProfit').textContent = 
+                    data.current.ortalamaKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                document.getElementById('whatifRemovalReservationCount').textContent = 
+                    data.current.rezervasyonSayisi.toLocaleString('tr-TR');
+
+                // Display simulated scenario
+                document.getElementById('whatifRemovalSimulatedProfit').textContent = 
+                    data.simulated.toplamKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+                document.getElementById('whatifRemovalSimulatedAvgProfit').textContent = 
+                    data.simulated.ortalamaKar.toLocaleString('tr-TR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + ' ₺';
+
+                // Display comparison
+                const comparisonDiv = document.getElementById('whatifRemovalComparison');
+                const profitDiff = data.comparison.profitDifference;
+                const diffAbs = Math.abs(profitDiff);
+                
+                let comparisonText = '';
+                let comparisonClass = 'neutral';
+                
+                if (profitDiff > 0.1) {
+                    comparisonText = `Kampanya kaldırılmış olsaydı toplam kâr %${diffAbs.toFixed(2)} artardı.`;
+                    comparisonClass = 'positive';
+                } else if (profitDiff < -0.1) {
+                    comparisonText = `Kampanya kaldırılmış olsaydı toplam kâr %${diffAbs.toFixed(2)} azalırdı.`;
+                    comparisonClass = 'negative';
+                } else {
+                    comparisonText = `Kampanya kaldırılmış olsaydı toplam kâr neredeyse aynı kalırdı.`;
+                    comparisonClass = 'neutral';
+                }
+
+                comparisonDiv.textContent = comparisonText;
+                comparisonDiv.className = 'whatif-comparison ' + comparisonClass;
+
+                // Display insight
+                const insightDiv = document.getElementById('whatifRemovalInsight');
+                let insightText = '';
+                let insightClass = 'neutral';
+                
+                if (data.simulated.toplamKar > data.current.toplamKar) {
+                    insightText = '⚠️ Bu kampanya kârlılığı düşürüyor olabilir. Kapatılması veya revize edilmesi önerilir.';
+                    insightClass = 'negative';
+                } else if (data.simulated.toplamKar < data.current.toplamKar) {
+                    insightText = '✓ Bu kampanya kârlılığı desteklemektedir. Devam edilmesi mantıklıdır.';
+                    insightClass = 'positive';
+                } else {
+                    insightText = '→ Bu kampanyanın kârlılık üzerinde belirgin bir etkisi görünmemektedir.';
+                    insightClass = 'neutral';
+                }
+
+                insightDiv.textContent = insightText;
+                insightDiv.className = 'whatif-comparison ' + insightClass;
+
+                resultsDiv.style.display = 'block';
+
+            } catch (error) {
+                console.error('What-if removal senaryosu hesaplanırken hata:', error);
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = 'Hesaplama sırasında bir hata oluştu.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Campaign Impact Matrix
+        // -----------------------------
+        function getMatrixCellClass(value, minValue, maxValue) {
+            if (value === 0 || (value === null || value === undefined)) {
+                return 'zero';
+            }
+            
+            const range = maxValue - minValue;
+            if (range === 0) {
+                return value >= 0 ? 'high' : 'low';
+            }
+            
+            const normalizedValue = (value - minValue) / range;
+            
+            if (value < 0) {
+                return 'low';
+            } else if (normalizedValue >= 0.6) {
+                return 'high';
+            } else if (normalizedValue >= 0.3) {
+                return 'medium';
+            } else {
+                return 'low';
+            }
+        }
+
+        function formatMatrixValue(value, metric) {
+            if (value === null || value === undefined || isNaN(value)) {
+                return '-';
+            }
+            
+            if (metric === 'reservationCount') {
+                return parseInt(value).toLocaleString('tr-TR');
+            } else if (metric === 'avgOccupancy') {
+                return parseFloat(value).toFixed(1) + '%';
+            } else {
+                return parseFloat(value).toLocaleString('tr-TR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }) + ' ₺';
+            }
+        }
+
+        function getMetricLabel(metricValue) {
+            const labels = {
+                'avgProfit': 'Ortalama Kâr',
+                'totalProfit': 'Toplam Kâr',
+                'reservationCount': 'Rezervasyon Sayısı',
+                'avgOccupancy': 'Ortalama Doluluk Oranı'
+            };
+            return labels[metricValue] || metricValue;
+        }
+
+        async function loadImpactMatrix(metric = 'avg_profit') {
+            const headerEl = document.getElementById('impactMatrixHeader');
+            const bodyEl = document.getElementById('impactMatrixBody');
+            const errorEl = document.getElementById('impactMatrixError');
+            const insightEl = document.getElementById('impactMatrixInsight');
+
+            if (!headerEl || !bodyEl) return;
+
+            try {
+                bodyEl.innerHTML = '<tr><td colspan="100" class="impact-matrix-loading">Yükleniyor...</td></tr>';
+                errorEl.style.display = 'none';
+                insightEl.style.display = 'none';
+
+                const response = await fetch(`/api/campaign-impact-matrix?metric=${metric}`);
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+
+                const data = await response.json();
+
+                if (!data.campaigns || data.campaigns.length === 0 || !data.tourTypes || data.tourTypes.length === 0) {
+                    bodyEl.innerHTML = '<tr><td colspan="100">Veri bulunamadı.</td></tr>';
+                    return;
+                }
+
+                // Build header row
+                let headerHTML = '<tr><th>Kampanya / Tur Türü</th>';
+                data.tourTypes.forEach(tourType => {
+                    headerHTML += `<th>${tourType}</th>`;
+                });
+                headerHTML += '</tr>';
+                headerEl.innerHTML = headerHTML;
+
+                // Build body rows
+                let bodyHTML = '';
+                data.campaigns.forEach(campaign => {
+                    bodyHTML += `<tr><td>${campaign}</td>`;
+                    data.tourTypes.forEach(tourType => {
+                        const value = data.matrix[campaign] && data.matrix[campaign][tourType] !== undefined
+                            ? data.matrix[campaign][tourType]
+                            : null;
+                        const formattedValue = formatMatrixValue(value, data.metric);
+                        const cellClass = getMatrixCellClass(value, data.valueRange.min, data.valueRange.max);
+                        
+                        bodyHTML += `<td class="matrix-cell ${cellClass}" title="${getMetricLabel(data.metric)}: ${formattedValue}">${formattedValue}</td>`;
+                    });
+                    bodyHTML += '</tr>';
+                });
+                bodyEl.innerHTML = bodyHTML;
+
+                // Update insight
+                if (data.bestCombination && data.bestCombination.campaign && data.bestCombination.tourType) {
+                    const bestValue = formatMatrixValue(data.bestCombination.value, data.metric);
+                    insightEl.innerHTML = `En verimli kampanya-tur kombinasyonu: <strong>${data.bestCombination.campaign}</strong> – <strong>${data.bestCombination.tourType}</strong> (${bestValue})`;
+                    insightEl.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Impact matrix yüklenirken hata:', error);
+                bodyEl.innerHTML = '';
+                errorEl.textContent = 'Veri yüklenirken bir hata oluştu.';
+                errorEl.style.display = 'block';
+            }
+        }
+
+    </script>
 </body>
 </html>

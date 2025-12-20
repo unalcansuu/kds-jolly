@@ -39,10 +39,11 @@
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: contain;
+            display: block;
             flex-shrink: 0;
         }
 
@@ -228,6 +229,11 @@
             color: #2F3A4A;
         }
 
+        .analysis-info-list li.analysis-loading {
+            color: #666;
+            font-style: italic;
+        }
+
         /* Tur Bazlı Karşılaştırma Analizi */
         .compare-section {
             margin-top: 22px;
@@ -376,6 +382,41 @@
             }
         }
 
+        /* Tur Süresine Göre Tercih Analizi (Yatay Bar Grafik) */
+        .duration-analysis-section {
+            margin-top: 18px;
+        }
+
+        .duration-analysis-subtitle {
+            margin: -10px 0 0 0;
+            font-size: 13px;
+            color: #6b778c;
+            text-align: center;
+        }
+
+        .duration-analysis-insight {
+            margin-top: 12px;
+            background: #fafafa;
+            border-left: 4px solid #2F3A4A;
+            padding: 12px 14px;
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Tur Bazlı Trend Analizi (Son 3 Ay) */
+        .trend-analysis-section {
+            margin-top: 18px;
+        }
+
+        .trend-analysis-subtitle {
+            margin: -10px 0 0 0;
+            font-size: 13px;
+            color: #6b778c;
+            text-align: center;
+        }
+
+
         /* (Yönetici Notu bölümü kaldırıldı) */
     </style>
 </head>
@@ -383,7 +424,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <img src="images/jolly-logo.png" alt="Jolly Logo" class="sidebar-logo">
+            <img src="/images/Jolly-Tur-Logo.jpg" alt="Jolly Tur Logo" class="sidebar-logo">
             <div class="sidebar-header-text">
                 <h1>Jolly SmartTour</h1>
                 <p>Karar Destek Sistemi</p>
@@ -440,17 +481,8 @@
                 <h2 class="analysis-info-title">Analitik Değerlendirme</h2>
             </div>
             <div class="analysis-info-content">
-                <ul class="analysis-info-list">
-                    <li>
-                        Kültür turları rezervasyon lideri olmasına rağmen doluluk oranının orta seviyede kalması,
-                        kapasite planlaması ve fiyat optimizasyonu ihtiyacına işaret etmektedir.
-                        Bu durum tur başına olan kârı düşürebilir.
-                    </li>
-                    <li>
-                        Macera turları düşük rezervasyon payına rağmen en yüksek doluluk oranına sahiptir.
-                        Bu durum, ilgilenen kitlenin sadık olduğuna veya turun potansiyelinin yüksek olduğuna,
-                        bu nedenle kapasitenin artırılabileceğine işaret edebilir.
-                    </li>
+                <ul class="analysis-info-list" id="analyticalEvaluationList">
+                    <li class="analysis-loading">Yükleniyor...</li>
                 </ul>
             </div>
         </div>
@@ -526,6 +558,46 @@
             </div>
         </section>
 
+        <!-- Tur Süresine Göre Tercih Analizi -->
+        <section class="duration-analysis-section" aria-label="Tur Süresine Göre Tercih Analizi">
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Süresine Göre Tercih Analizi</h2>
+                </div>
+                <p class="duration-analysis-subtitle">Müşterilerin tercih ettiği tur sürelerine göre rezervasyon dağılımı</p>
+
+                <div class="chart-wrapper" style="height: 260px;">
+                    <canvas id="durationChart"></canvas>
+                    <div id="durationChartLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="durationChartError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+
+                <div class="duration-analysis-insight">
+                    Rezervasyonların en yüksek payı 3–5 günlük turlarda görülmektedir. Bu durum, orta süreli tatillerin daha dengeli ve tercih edilir olduğunu göstermektedir.
+                </div>
+            </div>
+        </section>
+
+        <!-- Tur Bazlı Trend Analizi (Son 3 Ay) -->
+        <section class="trend-analysis-section" aria-label="Tur Bazlı Trend Analizi (Son 3 Ay)">
+            <div class="chart-container">
+                <div class="chart-title-wrapper">
+                    <h2 class="chart-title">Tur Bazlı Trend Analizi (Son 3 Ay)</h2>
+                </div>
+                <p class="trend-analysis-subtitle">Tur türlerine göre rezervasyon trendleri</p>
+
+                <div class="chart-wrapper" style="height: 300px;">
+                    <canvas id="tourTrendsChart"></canvas>
+                    <div id="tourTrendsLoading" class="chart-loading">Yükleniyor...</div>
+                    <div id="tourTrendsError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
+                </div>
+
+                <div class="duration-analysis-insight">
+                    Bu grafik, tur türlerinin son 3 ay içindeki talep değişimini göstermektedir. Artış eğilimi gösteren turlar için kapasite ve fiyat stratejileri gözden geçirilebilir.
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Chart.js Library -->
@@ -535,6 +607,7 @@
     <script>
         let tourTypeChart = null;
         let occupancyChart = null;
+        let tourTrendsChart = null;
 
         // Register datalabels plugin if available
         if (typeof ChartDataLabels !== 'undefined') {
@@ -1086,11 +1159,343 @@
             }
         }
 
+        // -----------------------------
+        // Tur Süresine Göre Tercih Analizi (Yatay Bar Grafik)
+        // -----------------------------
+        let durationChart = null;
+
+        async function loadTourDurationAnalysis() {
+            const canvas = document.getElementById('durationChart');
+            const loadingEl = document.getElementById('durationChartLoading');
+            const errorEl = document.getElementById('durationChartError');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            try {
+                const response = await fetch('/api/tour-duration-analysis');
+                if (!response.ok) throw new Error('API yanıtı alınamadı');
+                const data = await response.json();
+
+                const rows = Array.isArray(data) ? data : [];
+                const ordered = ['1–2 Gün', '3–5 Gün', '6+ Gün'].map(label => {
+                    const found = rows.find(r => r.label === label);
+                    return {
+                        label,
+                        reservationCount: found ? Number(found.reservationCount) || 0 : 0,
+                        weekdayCount: found ? Number(found.weekdayCount) || 0 : 0,
+                        weekendCount: found ? Number(found.weekendCount) || 0 : 0
+                    };
+                });
+
+                const labels = ordered.map(r => r.label);
+                const values = ordered.map(r => r.reservationCount);
+                const weekdayCounts = ordered.map(r => r.weekdayCount);
+                const weekendCounts = ordered.map(r => r.weekendCount);
+
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'none';
+
+                if (durationChart) durationChart.destroy();
+
+                const barColors = ['#6BB7FF', '#69D3B7', '#8ED6A8']; // soft blue/green tones
+
+                durationChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Rezervasyon Sayısı',
+                            data: values,
+                            backgroundColor: barColors,
+                            borderColor: barColors,
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            _weekdayCounts: weekdayCounts,
+                            _weekendCounts: weekendCounts
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const idx = context.dataIndex;
+                                        const total = Number(context.parsed.x) || 0;
+                                        const ds = context.dataset || {};
+                                        const wc = Array.isArray(ds._weekdayCounts) ? (Number(ds._weekdayCounts[idx]) || 0) : 0;
+                                        const wec = Array.isArray(ds._weekendCounts) ? (Number(ds._weekendCounts[idx]) || 0) : 0;
+                                        const fmt = (n) => new Intl.NumberFormat('tr-TR').format(n);
+                                        return [
+                                            `Toplam Rezervasyon: ${fmt(total)}`,
+                                            `Hafta İçi: ${fmt(wc)}`,
+                                            `Hafta Sonu: ${fmt(wec)}`
+                                        ];
+                                    }
+                                }
+                            },
+                            // value labels at the end of each bar
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: (value) => new Intl.NumberFormat('tr-TR').format(value),
+                                color: '#52606d',
+                                font: { weight: 'bold', size: 11 },
+                                clamp: true
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Rezervasyon Sayısı',
+                                    font: { size: 13, weight: 'bold' }
+                                },
+                                ticks: {
+                                    precision: 0
+                                },
+                                grid: {
+                                    color: 'rgba(0,0,0,0.06)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Tur Süresi',
+                                    font: { size: 13, weight: 'bold' }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Tur süresi analizi yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Tur Bazlı Trend Analizi (Son 3 Ay)
+        // -----------------------------
+        function getLastNMonthKeys(n) {
+            const keys = [];
+            const d = new Date();
+            d.setDate(1);
+            for (let i = n - 1; i >= 0; i--) {
+                const dt = new Date(d.getFullYear(), d.getMonth() - i, 1);
+                const y = dt.getFullYear();
+                const m = String(dt.getMonth() + 1).padStart(2, '0');
+                keys.push(`${y}-${m}`);
+            }
+            return keys;
+        }
+
+        async function loadTourTrends() {
+            const canvas = document.getElementById('tourTrendsChart');
+            const loadingEl = document.getElementById('tourTrendsLoading');
+            const errorEl = document.getElementById('tourTrendsError');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            try {
+                const response = await fetch('/api/tour-trends');
+                if (!response.ok) throw new Error('API yanıtı alınamadı');
+                const rows = await response.json();
+
+                const grouped = Array.isArray(rows) ? rows : [];
+
+                // X-axis must be ay_label (YYYY-MM). Always show last 3 months.
+                const monthKeys = getLastNMonthKeys(3);
+                const monthLabels = monthKeys.slice();
+
+                // Index grouped items by month
+                const monthMap = new Map();
+                grouped.forEach(g => {
+                    if (g && g.ay_label) monthMap.set(g.ay_label, Array.isArray(g.items) ? g.items : []);
+                });
+
+                // Collect unique tour types across all months
+                const allItems = grouped.flatMap(g => (Array.isArray(g.items) ? g.items : []));
+                const tourTypes = Array.from(new Set(allItems.map(i => i.tur_turu).filter(Boolean)))
+                    .sort((a, b) => a.localeCompare(b, 'tr'));
+
+                // Specific color mapping for tour types
+                const tourTypeColors = {
+                    'Kültür': '#E53935',
+                    'Yurt dışı': '#1E88E5',
+                    'Doğa': '#43A047',
+                    'Macera': '#FB8C00',
+                    'Kış Tatili': '#8E24AA',
+                    'Gemi': '#546E7A',
+                    'Festival': '#FDD835'
+                };
+
+                // Fallback color for tour types not in the mapping
+                const fallbackColors = ['#9E9E9E', '#BCBCBC', '#D4D4D4'];
+
+                const datasets = tourTypes.map((turTuru, idx) => {
+                    const series = monthKeys.map(monthKey => {
+                        const items = monthMap.get(monthKey) || [];
+                        const found = items.find(i => i.tur_turu === turTuru);
+                        return found ? (Number(found.rezervasyon_sayisi) || 0) : 0;
+                    });
+
+                    // Get color for this tour type, or use fallback
+                    const color = tourTypeColors[turTuru] || fallbackColors[idx % fallbackColors.length];
+                    
+                    return {
+                        label: turTuru,
+                        data: series,
+                        borderColor: color,
+                        backgroundColor: color,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: color,
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        borderWidth: 3,
+                        fill: false
+                    };
+                });
+
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'none';
+
+                if (tourTrendsChart) tourTrendsChart.destroy();
+
+                tourTrendsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: monthLabels,
+                        datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'nearest', intersect: false },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    boxHeight: 12,
+                                    padding: 12,
+                                    font: {
+                                        size: 13
+                                    },
+                                    usePointStyle: false
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const turTuru = context.dataset?.label || '';
+                                        const val = Number(context.parsed.y) || 0;
+                                        return `Tur Türü: ${turTuru} | Rezervasyon: ${new Intl.NumberFormat('tr-TR').format(val)}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Ay',
+                                    font: { size: 13, weight: 'bold' }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.06)' }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Rezervasyon Sayısı',
+                                    font: { size: 13, weight: 'bold' }
+                                },
+                                ticks: { precision: 0 },
+                                grid: { color: 'rgba(0,0,0,0.06)' }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Tur trendleri yüklenirken hata:', error);
+                loadingEl.style.display = 'none';
+                errorEl.style.display = 'block';
+            }
+        }
+
+        // -----------------------------
+        // Analitik Değerlendirme (Dynamic)
+        // -----------------------------
+        async function loadAnalyticalEvaluation() {
+            const listEl = document.getElementById('analyticalEvaluationList');
+            if (!listEl) return;
+
+            try {
+                const response = await fetch('/api/tour-analysis/leaders');
+                if (!response.ok) {
+                    throw new Error('API yanıtı alınamadı');
+                }
+                const data = await response.json();
+
+                const reservationLeader = data.reservationLeader;
+                const occupancyLeader = data.occupancyLeader;
+
+                // Clear loading message
+                listEl.innerHTML = '';
+
+                if (!reservationLeader || !occupancyLeader) {
+                    listEl.innerHTML = '<li>Veri yetersiz.</li>';
+                    return;
+                }
+
+                const isSameLeader = reservationLeader.turTuru === occupancyLeader.turTuru;
+
+                if (isSameLeader) {
+                    // Same leader: Show one bullet point about strong alignment
+                    const li = document.createElement('li');
+                    li.textContent = `${reservationLeader.turTuru} turları hem rezervasyon sayısında hem de doluluk oranında lider konumundadır. Bu durum, güçlü bir talep-kapasite uyumu ve etkili fiyat stratejisi sergilediğini göstermektedir.`;
+                    listEl.appendChild(li);
+                } else {
+                    // Different leaders: Show two bullet points
+                    // 1. Reservation leader with low occupancy
+                    const li1 = document.createElement('li');
+                    li1.textContent = `${reservationLeader.turTuru} turları rezervasyon sayısında lider olmasına rağmen, doluluk oranının düşük kalması; kapasite planlamasının talep ile uyumlu olmadığını ve fiyat/kampanya stratejilerinin doluluk verimliliğini yeterince desteklemediğini göstermektedir.`;
+                    listEl.appendChild(li1);
+
+                    // 2. Occupancy leader with lower reservation volume
+                    const li2 = document.createElement('li');
+                    li2.textContent = `${occupancyLeader.turTuru} turları düşük rezervasyona rağmen en yüksek doluluk oranına sahiptir. Bu, arz az olsa da kararlı ve sadık bir müşteri kitlesi olduğunu gösterir. Bu durumda kapasite artışı veya yeni ${occupancyLeader.turTuru.toLowerCase()} turları denenebilir.`;
+                    listEl.appendChild(li2);
+                }
+
+            } catch (error) {
+                console.error('Analitik değerlendirme yüklenirken hata:', error);
+                listEl.innerHTML = '<li>Veri yüklenirken bir hata oluştu.</li>';
+            }
+        }
+
         // Load charts when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            loadAnalyticalEvaluation();
             loadTourAnalysisByType();
             loadOccupancyByType();
             loadTourOptions();
+            loadTourDurationAnalysis();
+            loadTourTrends();
 
             const btn = document.getElementById('compareBtn');
             if (btn) btn.addEventListener('click', compareTours);

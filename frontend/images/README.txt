@@ -13,3 +13,7 @@ Logo specifications:
 - Display size: 40x40px (circular)
 - The CSS automatically applies border-radius: 50% to make it circular
 
+
+
+
+
