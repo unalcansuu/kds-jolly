@@ -261,6 +261,13 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
+            align-items: stretch;
+        }
+
+        .charts-row .chart-container {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         @media (max-width: 1200px) {
@@ -293,22 +300,38 @@
     <main class="main-content">
         <h1 class="page-title">Anket Analizi</h1>
         
-        <!-- Yaş Gruplarına Göre Müşteri Dağılımı -->
-        <div class="chart-container">
-            <h2 class="chart-title">Yaş Gruplarına Göre Müşteri Dağılımı</h2>
-            <p class="chart-subtitle">Hedef kitle optimizasyonu için yaş aralıklarına göre müşteri dağılımı</p>
-            
-            <div id="ageChartLoading" class="chart-loading">Yükleniyor...</div>
-            <div id="ageChartError" class="chart-error" style="display:none;"></div>
-            <div class="chart-wrapper" id="ageChartWrapper" style="display:none;">
-                <canvas id="ageGroupChart"></canvas>
+        <!-- Yaş Gruplarına Göre Müşteri Dağılımı and Yaş Grubu × Kampanya Hassasiyeti (Side by Side) -->
+        <div class="charts-row">
+            <!-- Yaş Gruplarına Göre Müşteri Dağılımı -->
+            <div class="chart-container">
+                <h2 class="chart-title">Yaş Gruplarına Göre Müşteri Dağılımı</h2>
+                <p class="chart-subtitle">Hedef kitle optimizasyonu için yaş aralıklarına göre müşteri dağılımı</p>
+                
+                <div id="ageChartLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="ageChartError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="ageChartWrapper" style="display:none;">
+                    <canvas id="ageGroupChart"></canvas>
+                </div>
+                <div id="ageChartInsight" class="chart-insight" style="display:none;"></div>
             </div>
-            <div id="ageChartInsight" class="chart-insight" style="display:none;"></div>
+
+            <!-- Yaş Grubu × Kampanya Hassasiyeti -->
+            <div class="chart-container">
+                <h2 class="chart-title">Yaş Grubu × Kampanya Hassasiyeti</h2>
+                <p class="chart-subtitle">Her yaş grubunda kampanyalı/kampanyasız rezervasyon oranı (%)</p>
+                
+                <div id="campaignSensitivityLoading" class="chart-loading">Yükleniyor...</div>
+                <div id="campaignSensitivityError" class="chart-error" style="display:none;"></div>
+                <div class="chart-wrapper" id="campaignSensitivityWrapper" style="display:none;">
+                    <canvas id="campaignSensitivityChart"></canvas>
+                </div>
+                <div id="campaignSensitivityInsight" class="chart-insight" style="display:none;"></div>
+            </div>
         </div>
 
-        <!-- Yaş Grubu × Tur Türü Tercihi (Isı Haritası) -->
+        <!-- Yaş Grubu x Tur Türü Tercihi -->
         <div class="chart-container">
-            <h2 class="chart-title">Yaş Grubu × Tur Türü Tercihi (Isı Haritası)</h2>
+            <h2 class="chart-title">Yaş Grubu x Tur Türü Tercihi</h2>
             <p class="chart-subtitle">Yaş segmentlerinin tur türlerine göre rezervasyon yoğunluğu</p>
             
             <div id="heatmapLoading" class="chart-loading">Yükleniyor...</div>
@@ -331,25 +354,12 @@
             </div>
         </div>
 
-        <!-- Yaş Grubu × Kampanya Hassasiyeti -->
-        <div class="chart-container">
-            <h2 class="chart-title">Yaş Grubu × Kampanya Hassasiyeti</h2>
-            <p class="chart-subtitle">Her yaş grubunda kampanyalı/kampanyasız rezervasyon oranı (%)</p>
-            
-            <div id="campaignSensitivityLoading" class="chart-loading">Yükleniyor...</div>
-            <div id="campaignSensitivityError" class="chart-error" style="display:none;"></div>
-            <div class="chart-wrapper" id="campaignSensitivityWrapper" style="display:none;">
-                <canvas id="campaignSensitivityChart"></canvas>
-            </div>
-            <div id="campaignSensitivityInsight" class="chart-insight" style="display:none;"></div>
-        </div>
-
         <!-- Öncelikli Özellikler and Aktivite Tercihleri (Side by Side) -->
         <div class="charts-row">
-            <!-- Öncelikli Özellikler (Talep Haritası) -->
+            <!-- Öncelikli Özellikler -->
             <div class="chart-container">
-                <h2 class="chart-title">Öncelikli Özellikler (Talep Haritası)</h2>
-                <p class="chart-subtitle">Müşterilerin tur seçerken en çok önem verdiği kriterler (Top 10)</p>
+                <h2 class="chart-title">Öncelikli Özellikler</h2>
+                <p class="chart-subtitle">Müşterilerin tur seçerken en çok önem verdiği kriterler</p>
                 
                 <div id="priorityFeaturesLoading" class="chart-loading">Yükleniyor...</div>
                 <div id="priorityFeaturesError" class="chart-error" style="display:none;"></div>
@@ -362,7 +372,7 @@
             <!-- Aktivite Tercihleri -->
             <div class="chart-container">
                 <h2 class="chart-title">Aktivite Tercihleri</h2>
-                <p class="chart-subtitle">Müşterilerin turda en çok tercih ettiği aktiviteler (Top 8)</p>
+                <p class="chart-subtitle">Müşterilerin turda en çok tercih ettiği aktiviteler</p>
                 
                 <div id="activityPreferencesLoading" class="chart-loading">Yükleniyor...</div>
                 <div id="activityPreferencesError" class="chart-error" style="display:none;"></div>
@@ -394,7 +404,7 @@
             <!-- Tatil Sıklığı Dağılımı -->
             <div class="chart-container">
                 <h2 class="chart-title">Tatil Sıklığı Dağılımı</h2>
-                <p class="chart-subtitle">Müşterilerin yılda kaç kez tatile çıktığı (Toplam yanıt dağılımı)</p>
+                <p class="chart-subtitle">Müşterilerin yılda kaç kez tatile çıktığı</p>
                 
                 <div id="tatilSikligiLoading" class="chart-loading">Yükleniyor...</div>
                 <div id="tatilSikligiError" class="chart-error" style="display:none;"></div>
@@ -408,8 +418,13 @@
 
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
     <script>
+        // Register datalabels plugin if available
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
         let ageGroupChart = null;
 
         async function loadAgeDistribution() {
@@ -447,30 +462,30 @@
                     ageGroupChart = null;
                 }
 
-                // Create bar chart
+                // Create pie chart
                 const ctx = canvasEl.getContext('2d');
+                
+                // Calculate percentages for labels
+                const percentages = data.counts.map(count => {
+                    return data.total > 0 ? ((count / data.total) * 100).toFixed(0) : '0';
+                });
+                
                 ageGroupChart = new Chart(ctx, {
-                    type: 'bar',
+                    type: 'pie',
                     data: {
                         labels: data.labels,
                         datasets: [{
                             label: 'Müşteri Sayısı',
                             data: data.counts,
                             backgroundColor: [
-                                '#3498db',
-                                '#2ecc71',
-                                '#f39c12',
-                                '#e74c3c',
-                                '#9b59b6'
+                                '#5B8DEF', // Soft blue
+                                '#8BC34A', // Soft green
+                                '#FFB74D', // Soft orange
+                                '#F06292', // Soft pink
+                                '#9575CD'  // Soft purple
                             ],
-                            borderColor: [
-                                '#2980b9',
-                                '#27ae60',
-                                '#d68910',
-                                '#c0392b',
-                                '#8e44ad'
-                            ],
-                            borderWidth: 1
+                            borderColor: '#ffffff',
+                            borderWidth: 2
                         }]
                     },
                     options: {
@@ -478,61 +493,52 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: false
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 13
+                                    },
+                                    usePointStyle: true
+                                }
                             },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        const value = context.parsed.y;
+                                        const value = context.parsed;
                                         const percentage = data.total > 0 
                                             ? ((value / data.total) * 100).toFixed(1) 
                                             : '0.0';
-                                        return value + ' müşteri (' + percentage + '%)';
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: function(value) {
-                                        if (Number.isInteger(value)) {
-                                            return value;
-                                        }
-                                    }
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Müşteri Sayısı',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
+                                        return context.label + ': ' + value + ' müşteri (' + percentage + '%)';
                                     }
                                 }
                             },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Yaş Grubu',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                }
+                            datalabels: {
+                                color: '#333',
+                                font: {
+                                    weight: 'bold',
+                                    size: 13
+                                },
+                                formatter: function(value, context) {
+                                    const percentage = data.total > 0 
+                                        ? ((value / data.total) * 100).toFixed(0) 
+                                        : '0';
+                                    return '%' + percentage;
+                                },
+                                anchor: 'center',
+                                align: 'center'
                             }
                         }
                     }
                 });
 
-                // Generate insight text
-                let insightHTML = '';
+                // Generate dynamic insight text based on age group with highest count
                 const maxIndex = data.counts.indexOf(Math.max(...data.counts));
                 const maxLabel = data.labels[maxIndex];
                 const maxCount = data.counts[maxIndex];
                 
-                insightHTML = `En yoğun yaş grubu: <strong>${maxLabel}</strong> (${maxCount} müşteri). Pazarlama hedeflemesi bu segmente göre optimize edilebilir.`;
+                const insightHTML = `En yoğun yaş grubu: ${maxLabel} (${maxCount} müşteri). Pazarlama hedeflemesi bu segmente göre optimize edilebilir.`;
 
                 insightEl.classList.remove('warning');
                 insightEl.innerHTML = insightHTML;
@@ -625,12 +631,42 @@
                 });
                 bodyEl.innerHTML = bodyHTML;
 
-                // Update legend
-                legendEl.textContent = `Düşük → Yüksek (0 - ${maxValue})`;
+                // Update legend (removed)
+                legendEl.textContent = '';
 
-                // Update insight
-                if (data.topCell && data.topCell.ageGroup && data.topCell.tourType) {
-                    insightEl.innerHTML = `En yoğun tercih: <strong>${data.topCell.ageGroup}</strong> yaş grubu • <strong>${data.topCell.tourType}</strong> (${data.topCell.value} rezervasyon). Bu segment için hedefli kampanya ve içerik planlaması yapılabilir.`;
+                // Generate dynamic insight text based on highest reservation count
+                let insightText = '';
+                if (data.ageGroups && data.tourTypes && data.matrix && data.matrix.length > 0) {
+                    let maxValue = 0;
+                    let maxAgeIndex = -1;
+                    let maxTourIndex = -1;
+                    
+                    // Scan all age group × tour type values to find the highest count
+                    data.ageGroups.forEach((ageGroup, ageIndex) => {
+                        if (data.matrix[ageIndex]) {
+                            data.tourTypes.forEach((tourType, tourIndex) => {
+                                const value = data.matrix[ageIndex][tourIndex] !== undefined
+                                    ? data.matrix[ageIndex][tourIndex]
+                                    : 0;
+                                if (value > maxValue) {
+                                    maxValue = value;
+                                    maxAgeIndex = ageIndex;
+                                    maxTourIndex = tourIndex;
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Generate insight text if we found a maximum value
+                    if (maxAgeIndex >= 0 && maxTourIndex >= 0 && maxValue > 0) {
+                        const topAgeGroup = data.ageGroups[maxAgeIndex];
+                        const topTourType = data.tourTypes[maxTourIndex];
+                        insightText = `En yoğun tercih: ${topAgeGroup} yaş grubu · ${topTourType} (${maxValue} rezervasyon). Bu segment için hedefli kampanya ve içerik planlaması yapılabilir.`;
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 
@@ -764,9 +800,24 @@
                     }
                 });
 
-                // Update insight text
-                if (data.topSensitive && data.topSensitive.ageGroup) {
-                    insightEl.innerHTML = `En yüksek kampanya hassasiyeti: <strong>${data.topSensitive.ageGroup}</strong> yaş grubu (%${data.topSensitive.kampanyaliPct} kampanyalı). Bu segment için kampanya hedeflemesi artırılabilir.`;
+                // Generate dynamic insight text based on age group with highest Kampanyalı percentage
+                let insightText = '';
+                if (data.ageGroups && data.percentages && data.percentages['Kampanyalı'] && data.percentages['Kampanyalı'].length > 0) {
+                    const kampanyaliPercentages = data.percentages['Kampanyalı'];
+                    
+                    // Find the index with the highest Kampanyalı percentage
+                    const maxPercentage = Math.max(...kampanyaliPercentages);
+                    const maxIndex = kampanyaliPercentages.indexOf(maxPercentage);
+                    const topAgeGroup = data.ageGroups[maxIndex];
+                    
+                    // Format percentage to show appropriate decimal places
+                    const formattedPercentage = maxPercentage.toFixed(1);
+                    
+                    insightText = `En yüksek kampanya hassasiyeti: ${topAgeGroup} yaş grubu (%${formattedPercentage} kampanyalı). Bu segment için kampanya hedeflemesi artırılabilir.`;
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 
@@ -818,11 +869,6 @@
                     priorityFeaturesChart = null;
                 }
 
-                // Find top feature for insight
-                const maxIndex = data.counts.indexOf(Math.max(...data.counts));
-                const topLabel = data.labels[maxIndex];
-                const topCount = data.counts[maxIndex];
-
                 // Create horizontal bar chart
                 const ctx = canvasEl.getContext('2d');
                 priorityFeaturesChart = new Chart(ctx, {
@@ -830,7 +876,7 @@
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Yanıt Sayısı',
+                            label: 'Tercih Sayısı',
                             data: data.counts,
                             backgroundColor: '#3498db',
                             borderColor: '#2980b9',
@@ -869,7 +915,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Yanıt Sayısı',
+                                    text: 'Tercih Sayısı',
                                     font: {
                                         size: 14,
                                         weight: 'bold'
@@ -890,9 +936,37 @@
                     }
                 });
 
-                // Update insight text
-                insightEl.innerHTML = `En çok öne çıkan kriter: <strong>${topLabel}</strong> (${topCount} yanıt). Bu kriteri tur paketleme ve pazarlama mesajlarında vurgulamak önerilir.`;
-                insightEl.style.display = 'block';
+                // Generate dynamic insight text based on top features
+                let insightText = '';
+                if (data.labels && data.counts && data.counts.length > 0) {
+                    // Create array of {label, count} pairs and sort by count (descending)
+                    const features = data.labels.map((label, index) => ({
+                        label: label,
+                        count: data.counts[index]
+                    })).sort((a, b) => b.count - a.count);
+                    
+                    const top1 = features[0];
+                    const top2 = features.length > 1 ? features[1] : null;
+                    
+                    // Check if top 2 features are equal or very close (within 2 counts or 10% difference)
+                    const countDifference = top2 ? top1.count - top2.count : top1.count;
+                    const percentageDifference = top2 && top1.count > 0 
+                        ? (countDifference / top1.count) * 100 
+                        : 0;
+                    
+                    if (top2 && (countDifference <= 2 || percentageDifference <= 10)) {
+                        // Top 2 features are close - show both
+                        insightText = `${top1.label} ve ${top2.label}, müşteri kararında en belirleyici iki faktördür. Kampanya ve iletişim stratejilerinde bu unsurların önceliklendirilmesi önerilir.`;
+                    } else {
+                        // Top feature is clearly higher
+                        insightText = `Müşteri kararlarında en belirleyici unsur ${top1.label} olarak öne çıkmaktadır. Pazarlama ve paketleme stratejilerinde bu kriterin vurgulanması önerilir.`;
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
+                    insightEl.style.display = 'block';
+                }
 
             } catch (error) {
                 console.error('Öncelikli özellikler yüklenirken hata:', error);
@@ -952,7 +1026,7 @@
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Yanıt Sayısı',
+                            label: 'Tercih Sayısı',
                             data: data.counts,
                             backgroundColor: '#9b59b6',
                             borderColor: '#8e44ad',
@@ -990,7 +1064,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Yanıt Sayısı',
+                                    text: 'Tercih Sayısı',
                                     font: {
                                         size: 14,
                                         weight: 'bold'
@@ -1011,9 +1085,35 @@
                     }
                 });
 
-                // Update insight text
-                if (data.topActivity && data.topActivity.name) {
-                    insightEl.innerHTML = `En çok tercih edilen aktivite: <strong>${data.topActivity.name}</strong> (${data.topActivity.count} yanıt). Tur paketlerinde bu aktivite vurgulanabilir.`;
+                // Generate dynamic insight text based on top activities
+                let insightText = '';
+                if (data.labels && data.counts && data.counts.length > 0) {
+                    // Create array of {label, count} pairs and sort by count (descending)
+                    const activities = data.labels.map((label, index) => ({
+                        label: label,
+                        count: data.counts[index]
+                    })).sort((a, b) => b.count - a.count);
+                    
+                    const top1 = activities[0];
+                    const top2 = activities.length > 1 ? activities[1] : null;
+                    
+                    // Check if top 2 activities are close (within 2 counts or 10% difference)
+                    const countDifference = top2 ? top1.count - top2.count : top1.count;
+                    const percentageDifference = top2 && top1.count > 0 
+                        ? (countDifference / top1.count) * 100 
+                        : 0;
+                    
+                    if (top2 && (countDifference <= 2 || percentageDifference <= 10)) {
+                        // Top 2 activities are close - show both
+                        insightText = `${top1.label} ve ${top2.label}, müşteriler tarafından en çok tercih edilen aktiviteler arasında yer almaktadır. Paket içerikleri bu aktivitelere göre zenginleştirilebilir.`;
+                    } else {
+                        // Clear top activity
+                        insightText = `En çok tercih edilen aktivite: ${top1.label} (${top1.count} tercih). Tur paketlerinde bu aktivitenin öne çıkarılması önerilir.`;
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 
@@ -1079,7 +1179,7 @@
                 // Prepare data for normal bar chart (3 bars)
                 const labels = data.segments.map(s => s.segment);
                 const counts = data.segments.map(s => s.count);
-                const colors = ['#e74c3c', '#f39c12', '#2ecc71']; // Red, Orange, Green
+                const colors = ['#E57373', '#F0C674', '#81C784']; // Soft muted red, Neutral yellow-grey, Soft green
 
                 // Create normal bar chart
                 const ctx = canvasEl.getContext('2d');
@@ -1091,7 +1191,7 @@
                             label: 'Yanıt Sayısı',
                             data: counts,
                             backgroundColor: colors,
-                            borderColor: colors.map(c => c.replace('rgb', 'rgba').replace(')', ',0.8)')),
+                            borderColor: ['#D32F2F', '#D9B85A', '#66BB6A'], // Slightly darker borders
                             borderWidth: 1
                         }]
                     },
@@ -1147,11 +1247,48 @@
                     }
                 });
 
-                // Update insight text - find segment with highest count
-                const maxSegment = data.segments.reduce((max, seg) => seg.count > max.count ? seg : max, data.segments[0]);
-                if (maxSegment && data.total > 0) {
-                    const percent = ((maxSegment.count / data.total) * 100).toFixed(2);
-                    insightEl.innerHTML = `Yanıtların en büyük kısmı <strong>${maxSegment.segment}</strong> segmentinde (%${percent}). Kampanya iletişimi bu segmente göre optimize edilebilir.`;
+                // Generate dynamic insight text based on impact distribution
+                let insightText = '';
+                if (data.segments && data.segments.length > 0) {
+                    // Find counts for each impact level
+                    const lowImpact = data.segments.find(s => s.segment.includes('Düşük') || s.segment.includes('0–1'));
+                    const mediumImpact = data.segments.find(s => s.segment.includes('Orta') || s.segment.includes('2–3'));
+                    const highImpact = data.segments.find(s => s.segment.includes('Yüksek') || s.segment.includes('4–5'));
+                    
+                    const lowCount = lowImpact ? lowImpact.count : 0;
+                    const mediumCount = mediumImpact ? mediumImpact.count : 0;
+                    const highCount = highImpact ? highImpact.count : 0;
+                    const total = data.total || (lowCount + mediumCount + highCount);
+                    
+                    // Find the dominant category
+                    const maxCount = Math.max(lowCount, mediumCount, highCount);
+                    
+                    // Determine which category is dominant
+                    if (mediumCount === maxCount) {
+                        // Medium Impact is highest
+                        insightText = 'Kampanya etkisi orta düzeydedir. Bu etki, doğru iletişim ve hedefli kampanyalar ile yüksek etki algısına dönüştürülebilir.';
+                    } else if (highCount === maxCount) {
+                        // High Impact is highest
+                        insightText = 'Kampanya etkisi güçlüdür. Müşterilerin önemli bir bölümü kampanyaları yüksek etkiyle algılamaktadır.';
+                    } else if (lowCount === maxCount) {
+                        // Low Impact is dominant
+                        insightText = 'Kampanya etkisi zayıf algılanmaktadır. Kampanya içeriği ve iletişim dili yeniden gözden geçirilmelidir.';
+                    }
+                    
+                    // Check if Medium + High together clearly dominate Low
+                    // "Clearly dominate" means Medium + High is at least 1.5x (or 60%+) of total
+                    const mediumHighTotal = mediumCount + highCount;
+                    const mediumHighPercentage = total > 0 ? (mediumHighTotal / total) * 100 : 0;
+                    const mediumHighDominates = mediumHighTotal > 0 && (mediumHighTotal >= lowCount * 1.5 || mediumHighPercentage >= 60);
+                    
+                    // Append additional message if Medium + High dominate (and Low is not the dominant category)
+                    if (mediumHighDominates && lowCount !== maxCount && insightText) {
+                        insightText += ' Genel algı olumlu olmakla birlikte, etki seviyesinin daha da artırılması mümkündür.';
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 
@@ -1298,9 +1435,26 @@
                     }
                 });
 
-                // Update insight text
-                if (data.topLabel && data.topCount > 0) {
-                    insightEl.innerHTML = `En sık görülen tatil sıklığı: <strong>${data.topLabel}</strong> (${data.topCount} yanıt).`;
+                // Update insight text based on dominant category
+                let insightText = '';
+                if (data.labels && data.counts && data.counts.length > 0) {
+                    // Find the index with the highest count
+                    const maxCount = Math.max(...data.counts);
+                    const dominantIndex = data.counts.indexOf(maxCount);
+                    const dominantLabel = data.labels[dominantIndex];
+                    
+                    // Generate insight text based on dominant category
+                    if (dominantLabel === '1' || dominantLabel === '2') {
+                        insightText = 'Müşterilerin büyük bölümü yılda 1–2 kez tatile çıkmaktadır. Bu durum, yılda sınırlı sayıda tatil planlayan kitleye yönelik paketlerin önceliklendirilmesi gerektiğini göstermektedir.';
+                    } else if (dominantLabel === '3') {
+                        insightText = 'Müşterilerin önemli bir kısmı yılda 3 kez tatile çıkmaktadır. Bu segment, daha sık seyahat eden ve kampanyalara duyarlı bir müşteri profiline işaret etmektedir.';
+                    } else if (dominantLabel === '4+') {
+                        insightText = 'Yılda 4 ve üzeri tatile çıkan müşteri oranının yüksek olması, sadık ve yüksek harcama potansiyeline sahip bir segmenti göstermektedir.';
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 

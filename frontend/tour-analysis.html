@@ -587,8 +587,7 @@
                     <div id="durationChartError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
                 </div>
 
-                <div class="duration-analysis-insight">
-                    Rezervasyonların en yüksek payı 3–5 günlük turlarda görülmektedir. Bu durum, orta süreli tatillerin daha dengeli ve tercih edilir olduğunu göstermektedir.
+                <div id="durationAnalysisInsight" class="duration-analysis-insight" style="display:none;">
                 </div>
             </div>
         </section>
@@ -607,8 +606,7 @@
                     <div id="tourTrendsError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
                 </div>
 
-                <div class="duration-analysis-insight">
-                    Bu grafik, tur türlerinin son 3 ay içindeki talep değişimini göstermektedir. Artış eğilimi gösteren turlar için kapasite ve fiyat stratejileri gözden geçirilebilir.
+                <div id="tourTrendsInsight" class="duration-analysis-insight" style="display:none;">
                 </div>
             </div>
         </section>
@@ -1315,6 +1313,24 @@
                         }
                     }
                 });
+
+                // Generate dynamic insight text based on duration with highest reservation count
+                const insightEl = document.getElementById('durationAnalysisInsight');
+                if (insightEl && labels && values && labels.length > 0 && values.length > 0) {
+                    // Find the index with the highest reservation count
+                    const maxValue = Math.max(...values);
+                    const maxIndex = values.indexOf(maxValue);
+                    const topDuration = labels[maxIndex];
+                    
+                    // Format the value with Turkish number formatting
+                    const formattedValue = new Intl.NumberFormat('tr-TR').format(maxValue);
+                    
+                    // Generate insight text
+                    const insightText = `Rezervasyonların en yüksek payı ${topDuration} turlarda görülmektedir (${formattedValue}). Bu durum, bu süre aralığındaki turların müşteriler tarafından daha dengeli ve tercih edilir bulunduğunu göstermektedir.`;
+                    
+                    insightEl.innerHTML = insightText;
+                    insightEl.style.display = 'block';
+                }
             } catch (error) {
                 console.error('Tur süresi analizi yüklenirken hata:', error);
                 loadingEl.style.display = 'none';
@@ -1484,6 +1500,39 @@
                         }
                     }
                 });
+
+                // Generate dynamic insight text based on tour type with strongest growth
+                const insightEl = document.getElementById('tourTrendsInsight');
+                if (insightEl && datasets && datasets.length > 0) {
+                    let maxGrowth = -Infinity;
+                    let topTourType = null;
+                    
+                    // For each tour type, compare first month to last month
+                    datasets.forEach(dataset => {
+                        if (dataset.data && dataset.data.length >= 3) {
+                            const firstMonth = dataset.data[0] || 0;
+                            const lastMonth = dataset.data[dataset.data.length - 1] || 0;
+                            
+                            // Check if there's growth (last month > first month)
+                            if (lastMonth > firstMonth) {
+                                const growth = lastMonth - firstMonth;
+                                
+                                // Track the tour type with highest growth
+                                if (growth > maxGrowth) {
+                                    maxGrowth = growth;
+                                    topTourType = dataset.label;
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Generate insight text if we found a tour type with growth
+                    if (topTourType && maxGrowth > 0) {
+                        const insightText = `Son 3 ayda talep artışı gösteren tur türü: ${topTourType}. Bu artış eğilimi, ilgili turlar için kapasite ve fiyat stratejilerinin yeniden değerlendirilmesi gerektiğini göstermektedir.`;
+                        insightEl.innerHTML = insightText;
+                        insightEl.style.display = 'block';
+                    }
+                }
             } catch (error) {
                 console.error('Tur trendleri yüklenirken hata:', error);
                 loadingEl.style.display = 'none';

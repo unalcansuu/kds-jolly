@@ -274,32 +274,6 @@
             padding-top: 0;
         }
 
-        .roi-insight {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #2ECC71;
-            font-size: 14px;
-            color: #333;
-            display: none;
-        }
-
-        .roi-insight.warning {
-            border-left-color: #F39C12;
-            background: #fffbf0;
-        }
-
-        .roi-insight.danger {
-            border-left-color: #E74C3C;
-            background: #fff5f5;
-        }
-
-        .roi-insight-icon {
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
         /* Charts Row: Side by Side Layout */
         .charts-row {
             display: grid;
@@ -327,6 +301,7 @@
             font-weight: 600;
             color: #333;
             margin: 0 0 25px 0;
+            white-space: nowrap;
         }
 
         .whatif-controls {
@@ -757,8 +732,6 @@
                     <div id="roiRankingLoading" class="chart-loading">Yükleniyor...</div>
                     <div id="roiRankingError" class="chart-error" style="display:none;">Veri yüklenirken bir hata oluştu.</div>
                 </div>
-
-                <div id="roiInsight" class="roi-insight"></div>
             </section>
         </div>
 
@@ -787,77 +760,9 @@
             <div id="impactMatrixInsight" class="impact-matrix-insight" style="display:none;"></div>
         </section>
 
-        <!-- What-If Senaryo Analizi: İndirim Oranı -->
-        <section class="whatif-section" aria-label="What-If Senaryo Analizi: İndirim Oranı">
-            <h2 class="whatif-title">What-If Senaryo Analizi: İndirim Oranı</h2>
-            
-            <div class="whatif-warning">
-                ⚠️ Bu bir simülasyondur, veritabanına kayıt yapılmaz.
-            </div>
-
-            <div class="whatif-controls">
-                <div class="whatif-control-group">
-                    <label for="whatifCampaignSelect">Kampanya Seç</label>
-                    <select id="whatifCampaignSelect">
-                        <option value="">Seçiniz...</option>
-                    </select>
-                </div>
-                <div class="whatif-control-group">
-                    <label for="whatifDiscountSlider">İndirim Oranı</label>
-                    <div class="whatif-slider-container">
-                        <input type="range" id="whatifDiscountSlider" class="whatif-slider" 
-                               min="0" max="50" value="25" step="1">
-                        <span class="whatif-slider-value" id="whatifDiscountValue">25%</span>
-                    </div>
-                </div>
-                <div class="whatif-control-group">
-                    <button id="whatifCalculateBtn" class="whatif-button">Senaryoyu Hesapla</button>
-                </div>
-            </div>
-
-            <div id="whatifResults" style="display:none;">
-                <div class="whatif-results">
-                    <div class="whatif-result-card">
-                        <div class="whatif-result-title">Mevcut Durum</div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Mevcut İndirim Oranı</div>
-                            <div class="whatif-result-value" id="whatifCurrentDiscount">-</div>
-                        </div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Toplam Kâr</div>
-                            <div class="whatif-result-value" id="whatifCurrentProfit">-</div>
-                        </div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Ortalama Kâr / Rezervasyon</div>
-                            <div class="whatif-result-value" id="whatifCurrentAvgProfit">-</div>
-                        </div>
-                    </div>
-                    <div class="whatif-result-card">
-                        <div class="whatif-result-title">What-If Senaryosu</div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Senaryo İndirim Oranı</div>
-                            <div class="whatif-result-value" id="whatifSimulatedDiscount">-</div>
-                        </div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Tahmini Toplam Kâr</div>
-                            <div class="whatif-result-value" id="whatifSimulatedProfit">-</div>
-                        </div>
-                        <div class="whatif-result-item">
-                            <div class="whatif-result-label">Tahmini Ortalama Kâr / Rezervasyon</div>
-                            <div class="whatif-result-value" id="whatifSimulatedAvgProfit">-</div>
-                        </div>
-                    </div>
-                </div>
-                <div id="whatifComparison" class="whatif-comparison"></div>
-            </div>
-
-            <div id="whatifLoading" class="whatif-loading" style="display:none;">Hesaplanıyor...</div>
-            <div id="whatifError" class="whatif-error" style="display:none;"></div>
-        </section>
-
         <!-- What-If Senaryo Analizi: Kampanya Kaldırılsaydı? -->
-        <section class="whatif-section" aria-label="What-If Senaryo Analizi: Kampanya Kaldırılsaydı?">
-            <h2 class="whatif-title">What-If Senaryo Analizi: Kampanya Kaldırılsaydı?</h2>
+        <section class="whatif-section" aria-label="Kampanya Kaldırma Senaryosu">
+            <h2 class="whatif-title">Kampanya Kaldırma Senaryosu</h2>
             
             <div class="whatif-warning">
                 ⚠️ Bu bir simülasyondur, gerçek veriler değiştirilmemiştir.
@@ -893,7 +798,7 @@
                         </div>
                     </div>
                     <div class="whatif-result-card">
-                        <div class="whatif-result-title">What-If (Kampanya Olmasaydı)</div>
+                        <div class="whatif-result-title">KAMPANYA OLMASAYDI (TAHMİNİ)</div>
                         <div class="whatif-result-item">
                             <div class="whatif-result-label">Tahmini Toplam Kâr</div>
                             <div class="whatif-result-value" id="whatifRemovalSimulatedProfit">-</div>
@@ -992,14 +897,22 @@
                             label: getMetricLabel(metric),
                             data: [data.kampanyali, data.kampanyasiz],
                             backgroundColor: [
-                                '#43A047', // Green for Kampanyalı
-                                '#FF9800'  // Orange for Kampanyasız
+                                '#5B8DEF', // Soft blue for Kampanyalı
+                                '#F2A65A'  // Soft orange for Kampanyasız
                             ],
                             borderColor: [
-                                '#2E7D32',
-                                '#F57C00'
+                                '#4A7EDB', // Border for Kampanyalı
+                                '#E19345'  // Border for Kampanyasız
                             ],
-                            borderWidth: 2
+                            borderWidth: 1.5,
+                            hoverBackgroundColor: [
+                                '#527FD7', // Slightly darker blue on hover (≈10% darker)
+                                '#DA9551'  // Slightly darker orange on hover (≈10% darker)
+                            ],
+                            hoverBorderColor: [
+                                '#4170C7', // Slightly darker border on hover
+                                '#CD8639'  // Slightly darker border on hover
+                            ]
                         }]
                     },
                     options: {
@@ -1083,16 +996,52 @@
         // -----------------------------
         let roiRankingChart = null;
 
-        // Get color based on ROI value
-        // Green: ROI > 20, Yellow: 0-20, Red: ROI < 0
-        function getROIColor(roi) {
-            if (roi < 0) {
-                return '#E53935'; // Red for negative ROI
-            } else if (roi >= 0 && roi <= 20) {
-                return '#FFC107'; // Yellow for 0-20%
-            } else {
-                return '#43A047'; // Green for ROI > 0 (specifically > 20%)
+        // Generate gradient colors based on ROI values
+        // Returns array of colors from light green (#c8e6c9) to dark green (#2e7d32)
+        function generateROIGradientColors(roiValues) {
+            if (!roiValues || roiValues.length === 0) {
+                return [];
             }
+            
+            const minROI = Math.min(...roiValues);
+            const maxROI = Math.max(...roiValues);
+            const range = maxROI - minROI;
+            
+            // Light green (lowest ROI) and dark green (highest ROI)
+            const lightGreen = { r: 200, g: 230, b: 201 }; // #c8e6c9
+            const darkGreen = { r: 46, g: 125, b: 50 };    // #2e7d32
+            
+            return roiValues.map(roi => {
+                if (range === 0) {
+                    // All values are the same, use dark green for emphasis
+                    return `#${darkGreen.r.toString(16).padStart(2, '0')}${darkGreen.g.toString(16).padStart(2, '0')}${darkGreen.b.toString(16).padStart(2, '0')}`;
+                }
+                
+                // Calculate interpolation factor (0 = min, 1 = max)
+                const factor = (roi - minROI) / range;
+                
+                // Interpolate between light and dark green
+                const r = Math.round(lightGreen.r + (darkGreen.r - lightGreen.r) * factor);
+                const g = Math.round(lightGreen.g + (darkGreen.g - lightGreen.g) * factor);
+                const b = Math.round(lightGreen.b + (darkGreen.b - lightGreen.b) * factor);
+                
+                // Convert to hex
+                return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            });
+        }
+        
+        // Darken a hex color for border
+        function darkenColor(hexColor, amount = 0.15) {
+            const hex = hexColor.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+            
+            const darkenedR = Math.max(0, Math.round(r * (1 - amount)));
+            const darkenedG = Math.max(0, Math.round(g * (1 - amount)));
+            const darkenedB = Math.max(0, Math.round(b * (1 - amount)));
+            
+            return `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`;
         }
 
         // Load ROI Ranking chart
@@ -1100,7 +1049,6 @@
             const canvas = document.getElementById('roiRankingChart');
             const loadingEl = document.getElementById('roiRankingLoading');
             const errorEl = document.getElementById('roiRankingError');
-            const insightEl = document.getElementById('roiInsight');
             
             if (!canvas) return;
 
@@ -1121,7 +1069,6 @@
                 if (!data.campaigns || data.campaigns.length === 0) {
                     errorEl.textContent = 'Kampanya verisi bulunamadı.';
                     errorEl.style.display = 'block';
-                    if (insightEl) insightEl.style.display = 'none';
                     return;
                 }
 
@@ -1133,7 +1080,7 @@
                 const campaigns = data.campaigns;
                 const labels = campaigns.map(c => c.kampanyaAdi);
                 const roiValues = campaigns.map(c => c.roi);
-                const colors = roiValues.map(roi => getROIColor(roi));
+                const colors = generateROIGradientColors(roiValues);
 
                 // Create horizontal bar chart
                 roiRankingChart = new Chart(ctx, {
@@ -1144,12 +1091,7 @@
                             label: 'ROI (%)',
                             data: roiValues,
                             backgroundColor: colors,
-                            borderColor: colors.map(c => {
-                                // Darken border slightly
-                                if (c === '#43A047') return '#2E7D32';
-                                if (c === '#FFC107') return '#F57C00';
-                                return '#C62828';
-                            }),
+                            borderColor: colors.map(c => darkenColor(c, 0.15)),
                             borderWidth: 2
                         }]
                     },
@@ -1228,37 +1170,10 @@
                     }
                 });
 
-                // Update insight text
-                if (insightEl && campaigns.length > 0) {
-                    const topCampaign = campaigns[0];
-                    const negativeROICount = campaigns.filter(c => c.roi < 0).length;
-                    
-                    let insightHTML = '';
-                    
-                    if (topCampaign.roi > 0) {
-                        insightHTML = `<span class="roi-insight-icon">🏆</span>En yüksek ROI'ye sahip kampanya: <strong>${topCampaign.kampanyaAdi}</strong> (${topCampaign.roi.toFixed(2)}%).`;
-                    }
-                    
-                    if (negativeROICount > 0) {
-                        insightEl.className = 'roi-insight danger';
-                        insightHTML += ` <span class="roi-insight-icon">⚠️</span><strong>Uyarı:</strong> ${negativeROICount} kampanya negatif ROI göstermektedir.`;
-                    } else if (topCampaign.roi > 0) {
-                        insightEl.className = 'roi-insight';
-                    }
-                    
-                    if (insightHTML) {
-                        insightEl.innerHTML = insightHTML;
-                        insightEl.style.display = 'block';
-                    } else {
-                        insightEl.style.display = 'none';
-                    }
-                }
-
             } catch (error) {
                 console.error('ROI sıralaması grafiği yüklenirken hata:', error);
                 loadingEl.style.display = 'none';
                 errorEl.style.display = 'block';
-                if (insightEl) insightEl.style.display = 'none';
                 if (roiRankingChart) {
                     roiRankingChart.destroy();
                     roiRankingChart = null;
@@ -1282,148 +1197,12 @@
             // Load ROI ranking chart
             loadROIRankingChart();
 
-            // Load what-if scenario functionality
-            loadWhatIfScenario();
-            
             // Load what-if removal scenario functionality
             loadWhatIfRemovalScenario();
 
             // Load impact matrix
             loadImpactMatrix();
         });
-
-        // -----------------------------
-        // What-If Senaryo Analizi: İndirim Oranı
-        // -----------------------------
-        async function loadWhatIfScenario() {
-            // Load campaigns into dropdown
-            try {
-                const response = await fetch('/api/campaigns');
-                if (response.ok) {
-                    const data = await response.json();
-                    const select = document.getElementById('whatifCampaignSelect');
-                    if (select && data.campaigns) {
-                        data.campaigns.forEach(campaign => {
-                            const option = document.createElement('option');
-                            option.value = campaign.kampanyaId;
-                            option.textContent = campaign.kampanyaAdi;
-                            select.appendChild(option);
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Kampanyalar yüklenirken hata:', error);
-            }
-
-            // Update slider value display
-            const slider = document.getElementById('whatifDiscountSlider');
-            const sliderValue = document.getElementById('whatifDiscountValue');
-            if (slider && sliderValue) {
-                slider.addEventListener('input', function() {
-                    sliderValue.textContent = this.value + '%';
-                });
-            }
-
-            // Calculate button click handler
-            const calculateBtn = document.getElementById('whatifCalculateBtn');
-            if (calculateBtn) {
-                calculateBtn.addEventListener('click', calculateWhatIfScenario);
-            }
-        }
-
-        async function calculateWhatIfScenario() {
-            const campaignSelect = document.getElementById('whatifCampaignSelect');
-            const slider = document.getElementById('whatifDiscountSlider');
-            const resultsDiv = document.getElementById('whatifResults');
-            const loadingDiv = document.getElementById('whatifLoading');
-            const errorDiv = document.getElementById('whatifError');
-
-            if (!campaignSelect || !slider) return;
-
-            const campaignId = campaignSelect.value;
-            const simulatedDiscount = parseFloat(slider.value);
-
-            if (!campaignId) {
-                alert('Lütfen bir kampanya seçin.');
-                return;
-            }
-
-            try {
-                loadingDiv.style.display = 'block';
-                errorDiv.style.display = 'none';
-                resultsDiv.style.display = 'none';
-
-                const response = await fetch(
-                    `/api/campaign-whatif-discount?campaign_id=${campaignId}&simulated_discount=${simulatedDiscount}`
-                );
-                
-                if (!response.ok) {
-                    throw new Error('API yanıtı alınamadı');
-                }
-
-                const data = await response.json();
-
-                loadingDiv.style.display = 'none';
-
-                // Display current situation
-                document.getElementById('whatifCurrentDiscount').textContent = 
-                    data.campaign.mevcutIndirimOrani.toFixed(1) + '%';
-                document.getElementById('whatifCurrentProfit').textContent = 
-                    data.original.toplamKar.toLocaleString('tr-TR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) + ' ₺';
-                document.getElementById('whatifCurrentAvgProfit').textContent = 
-                    data.original.ortalamaKar.toLocaleString('tr-TR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) + ' ₺';
-
-                // Display simulated scenario
-                document.getElementById('whatifSimulatedDiscount').textContent = 
-                    data.simulated.indirimOrani.toFixed(1) + '%';
-                document.getElementById('whatifSimulatedProfit').textContent = 
-                    data.simulated.toplamKar.toLocaleString('tr-TR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) + ' ₺';
-                document.getElementById('whatifSimulatedAvgProfit').textContent = 
-                    data.simulated.ortalamaKar.toLocaleString('tr-TR', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }) + ' ₺';
-
-                // Display comparison
-                const comparisonDiv = document.getElementById('whatifComparison');
-                const profitDiff = data.comparison.profitDifference;
-                const diffAbs = Math.abs(profitDiff);
-                
-                let comparisonText = '';
-                let comparisonClass = 'neutral';
-                
-                if (profitDiff > 0.1) {
-                    comparisonText = `Bu senaryoda toplam kâr %${diffAbs.toFixed(2)} artar.`;
-                    comparisonClass = 'positive';
-                } else if (profitDiff < -0.1) {
-                    comparisonText = `Bu senaryoda toplam kâr %${diffAbs.toFixed(2)} azalır.`;
-                    comparisonClass = 'negative';
-                } else {
-                    comparisonText = `Bu senaryoda toplam kâr neredeyse aynı kalır.`;
-                    comparisonClass = 'neutral';
-                }
-
-                comparisonDiv.textContent = comparisonText;
-                comparisonDiv.className = 'whatif-comparison ' + comparisonClass;
-
-                resultsDiv.style.display = 'block';
-
-            } catch (error) {
-                console.error('What-if senaryosu hesaplanırken hata:', error);
-                loadingDiv.style.display = 'none';
-                errorDiv.textContent = 'Hesaplama sırasında bir hata oluştu.';
-                errorDiv.style.display = 'block';
-            }
-        }
 
         // -----------------------------
         // What-If Senaryo Analizi: Kampanya Kaldırılsaydı?
@@ -1658,10 +1437,43 @@
                 });
                 bodyEl.innerHTML = bodyHTML;
 
-                // Update insight
-                if (data.bestCombination && data.bestCombination.campaign && data.bestCombination.tourType) {
-                    const bestValue = formatMatrixValue(data.bestCombination.value);
-                    insightEl.innerHTML = `En verimli kampanya-tur kombinasyonu: <strong>${data.bestCombination.campaign}</strong> – <strong>${data.bestCombination.tourType}</strong> (${bestValue})`;
+                // Generate dynamic insight text based on highest value in matrix
+                let insightText = '';
+                if (data.campaigns && data.tourTypes && data.matrix) {
+                    let maxValue = null;
+                    let maxCampaign = null;
+                    let maxTourType = null;
+                    
+                    // Scan all campaign × tour type values to find the highest numeric value
+                    data.campaigns.forEach(campaign => {
+                        if (data.matrix[campaign]) {
+                            data.tourTypes.forEach(tourType => {
+                                const value = data.matrix[campaign][tourType];
+                                
+                                // Ignore null, undefined, empty, or non-numeric values
+                                if (value !== null && value !== undefined && value !== '' && value !== '-') {
+                                    const numValue = typeof value === 'number' ? value : parseFloat(value);
+                                    
+                                    // Check if it's a valid number
+                                    if (!isNaN(numValue) && (maxValue === null || numValue > maxValue)) {
+                                        maxValue = numValue;
+                                        maxCampaign = campaign;
+                                        maxTourType = tourType;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Generate insight text if we found a maximum value
+                    if (maxValue !== null && maxCampaign && maxTourType) {
+                        const formattedValue = formatMatrixValue(maxValue);
+                        insightText = `En verimli kampanya–tur kombinasyonu: ${maxCampaign} – ${maxTourType} (${formattedValue}).`;
+                    }
+                }
+                
+                if (insightText) {
+                    insightEl.innerHTML = insightText;
                     insightEl.style.display = 'block';
                 }
 
