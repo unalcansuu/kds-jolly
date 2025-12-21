@@ -100,9 +100,17 @@
 
         .page-title {
             font-size: 32px;
-            margin-bottom: 30px;
+            margin-bottom: 12px;
             color: #333;
             font-weight: 600;
+        }
+
+        .page-description {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            font-weight: 400;
         }
 
         .chart-container {
@@ -290,15 +298,16 @@
         <nav class="sidebar-menu">
             <a href="home.html" class="menu-item">Anasayfa</a>
             <a href="tour-analysis.html" class="menu-item">Tur Analizi</a>
-            <a href="campaign-analysis.html" class="menu-item">Kampanya Etki Analizi</a>
-            <a href="survey-analysis.html" class="menu-item active">Anket Analizi</a>
+            <a href="campaign-analysis.html" class="menu-item">Finans ve Kampanya Analizi</a>
+            <a href="survey-analysis.html" class="menu-item active">Müşteri ve Anket Analizi</a>
             <a href="login.html" class="menu-item logout">Çıkış Yap</a>
         </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-        <h1 class="page-title">Anket Analizi</h1>
+        <h1 class="page-title">Müşteri ve Anket Analizi</h1>
+        <p class="page-description">Bu sayfa, müşteri profili, tercihleri ve kampanya hassasiyetine ilişkin anket verilerini analiz ederek hedef kitleyi daha iyi anlamayı amaçlar.</p>
         
         <!-- Yaş Gruplarına Göre Müşteri Dağılımı and Yaş Grubu × Kampanya Hassasiyeti (Side by Side) -->
         <div class="charts-row">
@@ -470,6 +479,21 @@
                     return data.total > 0 ? ((count / data.total) * 100).toFixed(0) : '0';
                 });
                 
+                // Define color mapping for age groups (soft, muted multicolor palette)
+                // Each age group has a distinct, harmonious pastel color
+                const ageGroupColors = {
+                    '18-24': '#A8C5A0',  // Soft sage green (pastel)
+                    '25-34': '#9BB5C5',  // Muted dusty blue (pastel)
+                    '35-44': '#D4C5B8',  // Light warm beige / sand (pastel)
+                    '45-54': '#C5B5D4',  // Soft lavender / muted purple (pastel)
+                    '55+': '#B8D4D4'     // Pale teal (pastel)
+                };
+                
+                // Map colors based on label order
+                const backgroundColor = data.labels.map(label => {
+                    return ageGroupColors[label] || '#E0E0E0'; // Fallback to light grey
+                });
+                
                 ageGroupChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -477,13 +501,7 @@
                         datasets: [{
                             label: 'Müşteri Sayısı',
                             data: data.counts,
-                            backgroundColor: [
-                                '#5B8DEF', // Soft blue
-                                '#8BC34A', // Soft green
-                                '#FFB74D', // Soft orange
-                                '#F06292', // Soft pink
-                                '#9575CD'  // Soft purple
-                            ],
+                            backgroundColor: backgroundColor,
                             borderColor: '#ffffff',
                             borderWidth: 2
                         }]
@@ -557,11 +575,13 @@
         // -----------------------------
         function getHeatmapColor(intensity) {
             // Intensity: 0.0 to 1.0
-            // Green/teal color scale - from light to darker
-            // Light: rgb(230, 255, 250) -> Dark: rgb(0, 150, 136)
-            const r = Math.floor(230 - (intensity * 230));
-            const g = Math.floor(255 - (intensity * 105));
-            const b = Math.floor(250 - (intensity * 114));
+            // Warm yellow-to-orange color scale - smooth gradient from light yellow to deeper orange
+            // Low values: rgb(255, 250, 220) - very light, soft yellow
+            // Medium values: muted amber / soft orange (interpolated)
+            // High values: rgb(255, 150, 60) - deeper orange (warm, not saturated)
+            const r = 255; // Red stays at max for yellow-orange range
+            const g = Math.floor(250 - (intensity * 100)); // 250 to 150
+            const b = Math.floor(220 - (intensity * 160)); // 220 to 60
             return `rgb(${r}, ${g}, ${b})`;
         }
 
@@ -728,15 +748,15 @@
                             {
                                 label: 'Kampanyalı (%)',
                                 data: data.percentages['Kampanyalı'],
-                                backgroundColor: '#2ecc71',
-                                borderColor: '#27ae60',
+                                backgroundColor: '#229954',
+                                borderColor: '#1e8449',
                                 borderWidth: 1
                             },
                             {
                                 label: 'Kampanyasız (%)',
                                 data: data.percentages['Kampanyasız'],
-                                backgroundColor: '#95a5a6',
-                                borderColor: '#7f8c8d',
+                                backgroundColor: '#b0bcc0',
+                                borderColor: '#95a5a6',
                                 borderWidth: 1
                             }
                         ]
@@ -878,8 +898,8 @@
                         datasets: [{
                             label: 'Tercih Sayısı',
                             data: data.counts,
-                            backgroundColor: '#3498db',
-                            borderColor: '#2980b9',
+                            backgroundColor: '#6988b3',
+                            borderColor: '#5a7399',
                             borderWidth: 1
                         }]
                     },
@@ -899,6 +919,18 @@
                                         const featureName = context.label;
                                         return featureName + ': ' + value + ' yanıt';
                                     }
+                                }
+                            },
+                            datalabels: {
+                                color: '#000000',
+                                font: {
+                                    weight: 600,
+                                    size: 14
+                                },
+                                anchor: 'center',
+                                align: 'center',
+                                formatter: function(value) {
+                                    return value;
                                 }
                             }
                         },
@@ -1028,8 +1060,8 @@
                         datasets: [{
                             label: 'Tercih Sayısı',
                             data: data.counts,
-                            backgroundColor: '#9b59b6',
-                            borderColor: '#8e44ad',
+                            backgroundColor: '#B8A8C4',
+                            borderColor: '#A696B0',
                             borderWidth: 1
                         }]
                     },
@@ -1363,8 +1395,8 @@
                         datasets: [{
                             label: 'Yanıt Sayısı',
                             data: data.counts,
-                            backgroundColor: '#3498db',
-                            borderColor: '#2980b9',
+                            backgroundColor: '#6988b3',
+                            borderColor: '#5a7399',
                             borderWidth: 1
                         }]
                     },
@@ -1390,11 +1422,50 @@
                                         const value = dataset.data[index];
                                         if (value > 0) {
                                             ctx.save();
-                                            ctx.fillStyle = '#333';
-                                            ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+                                            
+                                            // Set font properties
+                                            ctx.font = '700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
                                             ctx.textAlign = 'center';
-                                            ctx.textBaseline = 'bottom';
-                                            ctx.fillText(value, element.x, element.y - 5);
+                                            ctx.textBaseline = 'middle';
+                                            
+                                            // Get text dimensions
+                                            const text = String(value);
+                                            const textMetrics = ctx.measureText(text);
+                                            const textWidth = textMetrics.width;
+                                            const textHeight = 14; // Font size
+                                            
+                                            // Calculate background dimensions with padding
+                                            const paddingX = 6;
+                                            const paddingY = 4;
+                                            const bgWidth = textWidth + (paddingX * 2);
+                                            const bgHeight = textHeight + (paddingY * 2);
+                                            const borderRadius = 4;
+                                            
+                                            // Calculate center position within the bar
+                                            const barCenterX = element.x;
+                                            const barCenterY = element.y + (element.height / 2);
+                                            
+                                            // Draw rounded rectangle background
+                                            ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+                                            const bgX = barCenterX - (bgWidth / 2);
+                                            const bgY = barCenterY - (bgHeight / 2);
+                                            ctx.beginPath();
+                                            ctx.moveTo(bgX + borderRadius, bgY);
+                                            ctx.lineTo(bgX + bgWidth - borderRadius, bgY);
+                                            ctx.quadraticCurveTo(bgX + bgWidth, bgY, bgX + bgWidth, bgY + borderRadius);
+                                            ctx.lineTo(bgX + bgWidth, bgY + bgHeight - borderRadius);
+                                            ctx.quadraticCurveTo(bgX + bgWidth, bgY + bgHeight, bgX + bgWidth - borderRadius, bgY + bgHeight);
+                                            ctx.lineTo(bgX + borderRadius, bgY + bgHeight);
+                                            ctx.quadraticCurveTo(bgX, bgY + bgHeight, bgX, bgY + bgHeight - borderRadius);
+                                            ctx.lineTo(bgX, bgY + borderRadius);
+                                            ctx.quadraticCurveTo(bgX, bgY, bgX + borderRadius, bgY);
+                                            ctx.closePath();
+                                            ctx.fill();
+                                            
+                                            // Draw text on top
+                                            ctx.fillStyle = '#000000';
+                                            ctx.fillText(text, barCenterX, barCenterY);
+                                            
                                             ctx.restore();
                                         }
                                     });
