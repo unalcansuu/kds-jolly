@@ -1893,3 +1893,8 @@ startServer().catch((error) => {
   console.error('Failed to start server:', error);
   process.exit(1);
 });
+ const dashboardController = require('./controllers/dashboardController');
+
+app.get('/api/tour-types', dashboardController.getTourTypeStats);
+const routes = require('./routes');
+app.use('/api', routes);

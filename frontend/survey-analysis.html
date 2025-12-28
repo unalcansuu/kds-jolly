@@ -1081,6 +1081,18 @@
                                         return label + ': ' + value + ' yanıt';
                                     }
                                 }
+                            },
+                            datalabels: {
+                                color: '#000000',
+                                font: {
+                                    weight: 600,
+                                    size: 14
+                                },
+                                anchor: 'center',
+                                align: 'center',
+                                formatter: function(value) {
+                                    return value;
+                                }
                             }
                         },
                         scales: {
@@ -1274,6 +1286,18 @@
                                         return context.label + ': ' + count + ' yanıt (%' + percent + ')';
                                     }
                                 }
+                            },
+                            datalabels: {
+                                color: '#000000',
+                                font: {
+                                    weight: 600,
+                                    size: 14
+                                },
+                                anchor: 'center',
+                                align: 'center',
+                                formatter: function(value) {
+                                    return value;
+                                }
                             }
                         }
                     }
@@ -1424,7 +1448,7 @@
                                             ctx.save();
                                             
                                             // Set font properties
-                                            ctx.font = '700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+                                            ctx.font = '600 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
                                             ctx.textAlign = 'center';
                                             ctx.textBaseline = 'middle';
                                             
