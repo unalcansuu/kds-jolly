@@ -3,13 +3,7 @@ Amaç; yöneticilerin tur, kampanya, rezervasyon ve müşteri verileri üzerinde
 Uygulama; Node.js + Express kullanılarak geliştirilmiş olup, MVC mimarisine uygun bir yapıdadır.
 
 Senaryo Tanımı:
-Jolly Tur yönetimi
--Hangi tur türlerinin daha fazla talep gördüğünü,
--Kampanyaların kârlılık ve doluluk üzerindeki etkisini,
--Aylık kâr değişimlerini,
--Riskli (düşük doluluklu) turları,
--Anket verileri üzerinden müşteri davranışlarını
-analiz edebilir.
+Jolly Tur yönetimi; hangi tur türlerinin daha fazla talep gördüğünü, kampanyaların kârlılık ve doluluk üzerindeki etkisini, aylık kâr değişimlerini, riskli (düşük doluluklu) turları, anket verileri üzerinden müşteri davranışlarını analiz edebilir.
 
 Bazı İş Kuralları:
 - Bir turun kapasitesi dolduğunda, o tura ait yeni rezervasyon oluşturulması engellenir. Bu iş kuralı sayesinde gerçekçi doluluk oranı korunur ve aşırı satış (overbooking) önlenir.
