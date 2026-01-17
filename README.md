@@ -19,8 +19,6 @@ node server.js
 - Başlangıç ve bitiş tarihi dışında kalan kampanyalar geçersiz kabul edilir. Geçersiz kampanyalarla rezervasyon yapılmasına sistem tarafından izin verilmez.
 
 Bazı Endpoint'ler:
-## API Uç Noktaları
-
 - **POST** `/api/login`
 - **GET** `/api/kpi/monthly-profit`
 - **GET** `/api/tour-analysis/by-type`
