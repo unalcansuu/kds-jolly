@@ -19,13 +19,15 @@ node server.js
 - Başlangıç ve bitiş tarihi dışında kalan kampanyalar geçersiz kabul edilir. Geçersiz kampanyalarla rezervasyon yapılmasına sistem tarafından izin verilmez.
 
 Bazı Endpoint'ler:
--POST /api/login
--GET /api/kpi/monthly-profit
--GET /api/tour-analysis/by-type
--GET /api/tour-duration-analysis
--GET /api/kampanya-karsilastirma
--GET /api/campaign-occupancy-comparison-table
--GET /api/campaign-whatif-discount
--GET /api/alerts/critical-occupancy
--GET /api/analytics/age-campaign-sensitivity
--GET /api/anket/aktivite-tercihleri
+## API Uç Noktaları
+
+- **POST** `/api/login`
+- **GET** `/api/kpi/monthly-profit`
+- **GET** `/api/tour-analysis/by-type`
+- **GET** `/api/tour-duration-analysis`
+- **GET** `/api/kampanya-karsilastirma`
+- **GET** `/api/campaign-occupancy-comparison-table`
+- **GET** `/api/campaign-whatif-discount`
+- **GET** `/api/alerts/critical-occupancy`
+- **GET** `/api/analytics/age-campaign-sensitivity`
+- **GET** `/api/anket/aktivite-tercihleri`
