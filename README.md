@@ -9,6 +9,7 @@ Jolly Tur yönetimi
 -Aylık kâr değişimlerini,
 -Riskli (düşük doluluklu) turları,
 -Anket verileri üzerinden müşteri davranışlarını
+analiz edebilir.
 
 Bazı İş Kuralları:
 - Bir turun kapasitesi dolduğunda, o tura ait yeni rezervasyon oluşturulması engellenir. Bu iş kuralı sayesinde gerçekçi doluluk oranı korunur ve aşırı satış (overbooking) önlenir.
